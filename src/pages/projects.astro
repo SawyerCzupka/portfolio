@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import DotGrid from '../components/DotGrid.astro';
+import GeoAccent from '../components/GeoAccent.astro';
+
+const projects = [
+  {
+    id: 'lapevo',
+    name: 'LapEvo',
+    subtitle: 'iRacing Telemetry Tracker & AI Racing Coach',
+    period: 'Jan 2025 – Present',
+    url: 'https://lapevo.com',
+    description:
+      'Full-stack application for capturing and analyzing iRacing simulator telemetry at 60Hz, with an AI coaching layer that surfaces actionable insights from lap data. Built as a monorepo with a React 19/TypeScript frontend, FastAPI backend, and TimescaleDB hypertables for time-series storage.',
+    highlights: [
+      'Real-time 60Hz telemetry ingestion pipeline using Python/FastAPI microservices with thread-safe async processing and event-driven architecture',
+      'TimescaleDB hypertables for efficient time-series storage and querying of lap telemetry data',
+      'Auto-generated OpenAPI client via Orval, eliminating manual API contract drift between front and back end',
+      'pytest + testcontainers for fully isolated integration testing — CI/CD runs without a live game instance',
+      'Docker Compose orchestration for local development parity with production',
+    ],
+    stack: ['Python', 'FastAPI', 'React 19', 'TypeScript', 'TimescaleDB', 'Docker', 'pytest', 'Orval'],
+  },
+  {
+    id: 'homelab',
+    name: 'Personal Homelab Infrastructure',
+    subtitle: 'Production-grade self-hosted infrastructure',
+    period: 'Jul 2023 – Present',
+    url: null,
+    description:
+      'A production-grade homelab running on Proxmox with 6 VMs and a 116-pod Kubernetes cluster, hosting a variety of self-managed services. Everything is treated as infrastructure-as-code — provisioning, configuration, and deployment are all repeatable and version-controlled.',
+    highlights: [
+      'Proxmox hypervisor with Packer-built VM templates and Terraform for provisioning — reproducible from scratch',
+      'Kubernetes cluster (116 pods) managing Vaultwarden, Jellyfin, Gitea, Technitium DNS, and more',
+      'ArgoCD for GitOps-based continuous deployment — push to git, cluster self-heals to desired state',
+      'Traefik reverse proxy with automated Let\'s Encrypt TLS — zero manual certificate management',
+      'Prometheus + Grafana observability stack for cluster and service metrics',
+    ],
+    stack: ['Kubernetes', 'Proxmox', 'Terraform', 'Packer', 'ArgoCD', 'Traefik', 'Prometheus', 'Grafana', 'Linux'],
+  },
+];
+---
+
+<Base
+  title="Projects — Sawyer Czupka"
+  description="Personal projects in ML systems, infrastructure, and full-stack engineering."
+>
+  <div class="max-w-5xl mx-auto px-6 py-16">
+    {/* Page header */}
+    <header class="mb-16 relative">
+      <DotGrid
+        rows={4}
+        cols={6}
+        gap={16}
+        class="absolute right-0 top-0 text-faint opacity-30 hidden sm:block"
+      />
+      <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
+        // projects
+      </p>
+      <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
+        Projects
+      </h1>
+      <p class="text-muted mt-4 max-w-lg leading-relaxed">
+        Personal work outside of employment — things I built because I wanted to,
+        learned from, and continue to run.
+      </p>
+    </header>
+
+    {/* Project list */}
+    <div class="space-y-0">
+      {projects.map((project, i) => (
+        <article
+          id={project.id}
+          class="border-t border-border pt-12 pb-12 relative"
+        >
+          <GeoAccent
+            variant="corner"
+            class="absolute right-0 top-12 text-faint opacity-20 hidden md:block"
+          />
+
+          {/* Header row */}
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
+            <div>
+              <h2 class="text-2xl font-bold text-text">{project.name}</h2>
+              <p class="text-muted text-sm mt-1">{project.subtitle}</p>
+            </div>
+            <div class="flex items-center gap-4 shrink-0">
+              <span class="font-mono text-xs text-faint tracking-wider">
+                {project.period}
+              </span>
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-mono text-xs text-accent border border-accent px-3 py-1.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide"
+                >
+                  ↗ visit
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Description */}
+          <p class="text-muted leading-relaxed mb-8 max-w-3xl">
+            {project.description}
+          </p>
+
+          {/* Highlights */}
+          <ul class="space-y-3 mb-8 max-w-3xl" role="list">
+            {project.highlights.map((h) => (
+              <li class="flex gap-3 text-sm text-muted leading-relaxed">
+                <span class="text-accent shrink-0 font-mono mt-0.5">—</span>
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Stack tags */}
+          <div class="flex flex-wrap gap-2">
+            {project.stack.map((tech) => (
+              <span class="font-mono text-xs text-faint border border-border-strong px-2 py-1">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </article>
+      ))}
+
+      <div class="border-t border-border" />
+    </div>
+  </div>
+</Base>

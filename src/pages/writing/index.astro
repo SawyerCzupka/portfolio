@@ -1,0 +1,82 @@
+---
+import Base from '../../layouts/Base.astro';
+import DotGrid from '../../components/DotGrid.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base
+  title="Writing — Sawyer Czupka"
+  description="Articles on ML systems, infrastructure, and software engineering."
+>
+  <div class="max-w-5xl mx-auto px-6 py-16">
+    {/* Page header */}
+    <header class="mb-16 relative">
+      <DotGrid
+        rows={4}
+        cols={6}
+        gap={16}
+        class="absolute right-0 top-0 text-faint opacity-30 hidden sm:block"
+      />
+      <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
+        // writing
+      </p>
+      <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
+        Writing
+      </h1>
+      <p class="text-muted mt-4 max-w-lg leading-relaxed">
+        Notes and articles on ML systems, infrastructure, software engineering,
+        and whatever I'm currently building or thinking about.
+      </p>
+    </header>
+
+    {/* Post list */}
+    {posts.length === 0 ? (
+      <p class="font-mono text-sm text-muted">// no posts yet</p>
+    ) : (
+      <ul class="space-y-0" role="list">
+        {posts.map((post) => {
+          const slug = post.id.replace(/\.(md|mdx)$/, '');
+          const dateStr = post.data.date.toISOString().slice(0, 10);
+          return (
+            <li class="border-t border-border last:border-b last:border-border">
+              <a
+                href={`/writing/${slug}`}
+                class="group grid grid-cols-1 sm:grid-cols-[140px_1fr_24px] gap-3 sm:gap-6 py-6 hover:bg-surface/40 -mx-4 px-4 transition-colors duration-150"
+              >
+                <time
+                  datetime={dateStr}
+                  class="font-mono text-xs text-faint tracking-wider sm:pt-1"
+                >
+                  {dateStr}
+                </time>
+                <div>
+                  <h2 class="text-base font-semibold text-text group-hover:text-accent transition-colors duration-150 mb-1">
+                    {post.data.title}
+                  </h2>
+                  <p class="text-sm text-muted leading-relaxed mb-3">
+                    {post.data.description}
+                  </p>
+                  {post.data.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-1.5">
+                      {post.data.tags.map((tag) => (
+                        <span class="font-mono text-xs text-faint border border-border px-1.5 py-0.5">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <span class="font-mono text-xs text-faint group-hover:text-accent transition-colors duration-150 hidden sm:block self-center justify-self-end">
+                  →
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </div>
+</Base>

@@ -1,0 +1,31 @@
+---
+const year = new Date().getFullYear();
+
+const links = [
+  { href: 'mailto:sawyerczupka@gmail.com', label: 'email' },
+  { href: 'https://linkedin.com/in/sawyerczupka', label: 'linkedin' },
+  { href: 'https://github.com/sawyerczupka', label: 'github' },
+];
+---
+
+<footer class="border-t border-border mt-24">
+  <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <span class="font-mono text-xs text-faint tracking-wider">
+      © {year} SAWYER CZUPKA
+    </span>
+    <ul class="flex items-center gap-5" role="list">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            target={link.href.startsWith('http') ? '_blank' : undefined}
+            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</footer>

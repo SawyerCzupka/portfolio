@@ -1,0 +1,63 @@
+---
+import Base from './Base.astro';
+import GeoAccent from '../components/GeoAccent.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    date: Date;
+    tags: string[];
+  };
+}
+
+const { frontmatter } = Astro.props;
+
+const dateStr = frontmatter.date.toISOString().slice(0, 10);
+---
+
+<Base title={`${frontmatter.title} — Sawyer Czupka`} description={frontmatter.description}>
+  <article class="max-w-5xl mx-auto px-6 py-16">
+    {/* Back link */}
+    <a
+      href="/writing"
+      class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider inline-flex items-center gap-2 mb-12"
+    >
+      ← writing
+    </a>
+
+    {/* Header */}
+    <header class="mb-12 relative">
+      <GeoAccent variant="corner" class="absolute right-0 top-0 text-faint opacity-50" />
+
+      <div class="flex items-center gap-4 mb-6">
+        <time datetime={dateStr} class="font-mono text-xs text-muted tracking-wider">
+          {dateStr}
+        </time>
+        {frontmatter.tags.length > 0 && (
+          <div class="flex gap-2 flex-wrap">
+            {frontmatter.tags.map((tag) => (
+              <span class="font-mono text-xs text-muted border border-border-strong px-2 py-0.5">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-bold leading-tight text-text mb-4">
+        {frontmatter.title}
+      </h1>
+      <p class="text-muted text-lg leading-relaxed max-w-2xl">
+        {frontmatter.description}
+      </p>
+
+      <div class="mt-8 border-t border-border-strong" />
+    </header>
+
+    {/* Content */}
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</Base>
