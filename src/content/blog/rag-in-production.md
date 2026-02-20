@@ -3,7 +3,7 @@ title: "Building Production RAG Systems: Lessons from Three Deployments"
 description: "What actually breaks when you move retrieval-augmented generation from a demo to something that handles real users and real documents — from the World Bank to enterprise contracts."
 date: 2025-11-10
 tags: ["ML", "RAG", "infrastructure", "LLMs"]
-draft: false
+draft: true
 ---
 
 I've now built RAG systems in three meaningfully different contexts: a research platform at a university lab, a large-scale document analysis pipeline for the World Bank, and a production chatbot for an enterprise software company. Each one taught me something the previous hadn't.

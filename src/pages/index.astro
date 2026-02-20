@@ -7,6 +7,11 @@ import PostList from "@/components/PostList.astro";
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
+
+const featuredProjects = await getCollection(
+  "projects",
+  ({ data }) => data.featured,
+);
 ---
 
 <Base title="Sawyer Czupka">
@@ -14,7 +19,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
   <section class="max-w-5xl mx-auto px-6 pt-16 pb-36 relative overflow-hidden">
     {/* Background: large dot grid + geometric composition, right half */}
     <HeroBackground
-      class="hidden lg:block absolute right-[-24px] top-[-16px] text-faint opacity-[0.22] pointer-events-none"
+      class="hidden lg:block absolute -right-6 -top-4 text-faint opacity-[0.22] pointer-events-none"
     />
 
     {/* Content floats above the background */}
@@ -106,59 +111,34 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border-strong">
-      <a
-        href="/projects#lapevo"
-        class="group bg-bg p-6 hover:bg-surface transition-colors duration-150"
-      >
-        <div class="flex items-start justify-between mb-4">
-          <h3
-            class="font-semibold text-text group-hover:text-accent transition-colors duration-150"
+      {
+        featuredProjects.map((project) => (
+          <a
+            href={`/projects#${project.id}`}
+            class="group bg-bg p-6 hover:bg-surface transition-colors duration-150"
           >
-            LapEvo
-          </h3>
-          <span class="font-mono text-xs text-faint">2025 →</span>
-        </div>
-        <p class="text-sm text-muted leading-relaxed mb-4">
-          iRacing telemetry tracker and AI racing coach — real-time 60Hz data
-          pipeline, React dashboard, and TimescaleDB time-series storage.
-        </p>
-        <div class="flex flex-wrap gap-1.5">
-          {
-            ["Python", "FastAPI", "React", "TimescaleDB"].map((t) => (
-              <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-0.5">
-                {t}
+            <div class="flex items-start justify-between mb-4">
+              <h3 class="font-semibold text-text group-hover:text-accent transition-colors duration-150">
+                {project.data.name}
+              </h3>
+              <span class="font-mono text-xs text-faint">
+                {project.data.period.match(/\d{4}/)?.[0]} →
               </span>
-            ))
-          }
-        </div>
-      </a>
-
-      <a
-        href="/projects#homelab"
-        class="group bg-bg p-6 hover:bg-surface transition-colors duration-150"
-      >
-        <div class="flex items-start justify-between mb-4">
-          <h3
-            class="font-semibold text-text group-hover:text-accent transition-colors duration-150"
-          >
-            Homelab Infrastructure
-          </h3>
-          <span class="font-mono text-xs text-faint">2023 →</span>
-        </div>
-        <p class="text-sm text-muted leading-relaxed mb-4">
-          Production-grade homelab: 116-pod Kubernetes cluster on Proxmox,
-          GitOps via ArgoCD, Terraform/Packer infra-as-code, and automated TLS.
-        </p>
-        <div class="flex flex-wrap gap-1.5">
-          {
-            ["Kubernetes", "Terraform", "ArgoCD", "Proxmox"].map((t) => (
-              <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-0.5">
-                {t}
-              </span>
-            ))
-          }
-        </div>
-      </a>
+            </div>
+            <p class="text-sm text-muted leading-relaxed mb-4">
+              {project.data.teaser}
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              {project.data.stack.slice(0, 4).map((t) => (
+                <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-0.5">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </a>
+        ))
+      }
+      {featuredProjects.length % 2 !== 0 && <div class="bg-bg hidden sm:block" />}
     </div>
   </section>
 </Base>

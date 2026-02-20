@@ -3,7 +3,7 @@ title: "Running Kubernetes at Home: A Year of Production GitOps"
 description: "What running a 116-pod Kubernetes cluster on Proxmox has taught me about infrastructure-as-code, GitOps, and where the real complexity lives."
 date: 2025-09-03
 tags: ["kubernetes", "infrastructure", "homelab", "DevOps"]
-draft: false
+draft: true
 ---
 
 I've been running a production-grade Kubernetes cluster at home since mid-2023. Not a single-node Kind cluster for learning — a multi-VM setup on Proxmox with 116 pods across services I actually depend on: password management, DNS, media, code hosting, and more. Everything is infrastructure-as-code. Nothing is click-ops.

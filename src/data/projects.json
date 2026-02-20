@@ -1,0 +1,38 @@
+[
+  {
+    "id": "lapevo",
+    "name": "LapEvo",
+    "subtitle": "iRacing Telemetry Tracker & AI Racing Coach",
+    "period": "Jan 2025 - Present",
+    "url": "https://lapevo.com",
+    "featured": true,
+    "teaser": "iRacing telemetry tracker and AI racing coach — real-time 60Hz data pipeline, React dashboard, and TimescaleDB time-series storage.",
+    "description": "Full-stack application for capturing and analyzing iRacing simulator telemetry at 60Hz, with an AI coaching layer that surfaces actionable insights from lap data. Built as a monorepo with a React 19/TypeScript frontend, FastAPI backend, and TimescaleDB hypertables for time-series storage.",
+    "highlights": [
+      "Real-time 60Hz telemetry ingestion pipeline using Python/FastAPI microservices with thread-safe async processing and event-driven architecture",
+      "TimescaleDB hypertables for efficient time-series storage and querying of lap telemetry data",
+      "Auto-generated OpenAPI client via Orval, eliminating manual API contract drift between front and back end",
+      "pytest + testcontainers for fully isolated integration testing — CI/CD runs without a live game instance",
+      "Docker Compose orchestration for local development parity with production"
+    ],
+    "stack": ["Python", "FastAPI", "React 19", "TypeScript", "TimescaleDB", "Docker", "pytest", "Orval"]
+  },
+  {
+    "id": "homelab",
+    "name": "Personal Homelab Infrastructure",
+    "subtitle": "Production-grade self-hosted infrastructure",
+    "period": "Jul 2023 - Present",
+    "url": null,
+    "featured": false,
+    "teaser": "Production-grade homelab: 116-pod Kubernetes cluster on Proxmox, GitOps via ArgoCD, Terraform/Packer infra-as-code, and automated TLS.",
+    "description": "A production-grade homelab running on Proxmox with 6 VMs and a 116-pod Kubernetes cluster, hosting a variety of self-managed services. Everything is treated as infrastructure-as-code — provisioning, configuration, and deployment are all repeatable and version-controlled.",
+    "highlights": [
+      "Proxmox hypervisor with Packer-built VM templates and Terraform for provisioning — reproducible from scratch",
+      "Kubernetes cluster (116 pods) managing Vaultwarden, Jellyfin, Gitea, Technitium DNS, and more",
+      "ArgoCD for GitOps-based continuous deployment — push to git, cluster self-heals to desired state",
+      "Traefik reverse proxy with automated Let's Encrypt TLS — zero manual certificate management",
+      "Prometheus + Grafana observability stack for cluster and service metrics"
+    ],
+    "stack": ["Kubernetes", "Proxmox", "Terraform", "Packer", "ArgoCD", "Traefik", "Prometheus", "Grafana", "Linux"]
+  }
+]
