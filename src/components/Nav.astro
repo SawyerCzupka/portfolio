@@ -1,20 +1,22 @@
 ---
 const navLinks = [
-  { href: '/', label: 'home' },
-  { href: '/writing', label: 'writing' },
-  { href: '/projects', label: 'projects' },
-  { href: '/resume', label: 'resume' },
+  { href: "/", label: "home" },
+  { href: "/projects", label: "projects" },
+  { href: "/resume", label: "resume" },
+  { href: "/writing", label: "writing" },
 ];
 
 const currentPath = Astro.url.pathname;
 
 function isActive(href: string): boolean {
-  if (href === '/') return currentPath === '/';
+  if (href === "/") return currentPath === "/";
   return currentPath.startsWith(href);
 }
 ---
 
-<header class="border-b border-border sticky top-0 z-50 bg-bg/95 backdrop-blur-sm">
+<header
+  class="border-b border-border sticky top-0 z-50 bg-bg/95 backdrop-blur-sm"
+>
   <nav class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
     <a
       href="/"
@@ -24,21 +26,23 @@ function isActive(href: string): boolean {
     </a>
 
     <ul class="flex items-center gap-6" role="list">
-      {navLinks.map((link) => (
-        <li>
-          <a
-            href={link.href}
-            class={`font-mono text-xs tracking-wider transition-colors duration-150 ${
-              isActive(link.href)
-                ? 'text-accent'
-                : 'text-muted hover:text-text'
-            }`}
-            aria-current={isActive(link.href) ? 'page' : undefined}
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+      {
+        navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class={`font-mono text-xs tracking-wider transition-colors duration-150 ${
+                isActive(link.href)
+                  ? "text-accent"
+                  : "text-muted hover:text-text"
+              }`}
+              aria-current={isActive(link.href) ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </nav>
 </header>

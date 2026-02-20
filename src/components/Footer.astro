@@ -1,10 +1,27 @@
 ---
+import { Mail, Linkedin, Github } from '@lucide/astro';
+
 const year = new Date().getFullYear();
 
 const links = [
-  { href: 'mailto:sawyerczupka@gmail.com', label: 'email' },
-  { href: 'https://linkedin.com/in/sawyerczupka', label: 'linkedin' },
-  { href: 'https://github.com/sawyerczupka', label: 'github' },
+  {
+    href: 'mailto:sawyerczupka@gmail.com',
+    label: 'email',
+    icon: Mail,
+    external: false,
+  },
+  {
+    href: 'https://linkedin.com/in/sawyerczupka',
+    label: 'linkedin',
+    icon: Linkedin,
+    external: true,
+  },
+  {
+    href: 'https://github.com/sawyerczupka',
+    label: 'github',
+    icon: Github,
+    external: true,
+  },
 ];
 ---
 
@@ -14,15 +31,17 @@ const links = [
       © {year} SAWYER CZUPKA
     </span>
     <ul class="flex items-center gap-5" role="list">
-      {links.map((link) => (
+      {links.map(({ href, label, icon: Icon, external }) => (
         <li>
           <a
-            href={link.href}
-            target={link.href.startsWith('http') ? '_blank' : undefined}
-            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
+            href={href}
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noopener noreferrer' : undefined}
+            aria-label={label}
+            class="flex items-center gap-1.5 font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider group"
           >
-            {link.label}
+            <Icon size={14} class="shrink-0" />
+            <span class="hidden sm:inline">{label}</span>
           </a>
         </li>
       ))}

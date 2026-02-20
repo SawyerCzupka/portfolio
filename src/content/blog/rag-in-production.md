@@ -27,6 +27,7 @@ At Teamculture.ai, I built an evaluation system before we had a production chatb
 The system ran on AWS Lambda + API Gateway, which meant evaluation could be triggered on every significant change without blocking the main development loop. We curated golden datasets from real user queries, which meant the evaluation suite got more realistic over time rather than drifting from actual usage.
 
 The specific metrics that mattered for our use case:
+
 - **Context recall** — was the right document even being retrieved?
 - **Faithfulness** — was the generated answer grounded in the retrieved context, or was the model confabulating?
 - **Answer relevance** — was the answer actually responsive to the question?

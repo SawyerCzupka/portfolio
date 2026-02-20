@@ -1,0 +1,13 @@
+name = "sawyer-czupka-portfolio"
+compatibility_date = "2026-02-19"
+
+[assets]
+directory = "./dist"
+
+[[routes]]
+pattern = "sawyerczupka.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.sawyerczupka.com"
+custom_domain = true

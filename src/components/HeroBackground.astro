@@ -1,0 +1,93 @@
+---
+// Large technical geometric composition for the hero section.
+// Dot grid + bounding rectangle + corner marks + center crosshair.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+const COLS = 18;
+const ROWS = 13;
+const GAP = 24;
+const OFFSET_X = 14;
+const OFFSET_Y = 14;
+const W = 460;
+const H = 336;
+
+const dots = Array.from({ length: COLS * ROWS }, (_, i) => ({
+  cx: OFFSET_X + (i % COLS) * GAP,
+  cy: OFFSET_Y + Math.floor(i / COLS) * GAP,
+}));
+
+const TICK = 22;
+const MID_X = W / 2;
+const MID_Y = H / 2;
+---
+
+<svg
+  class={className}
+  width={W}
+  height={H}
+  viewBox={`0 0 ${W} ${H}`}
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  {/* ── Dot grid ─────────────────────────────── */}
+  {dots.map((d) => (
+    <circle cx={d.cx} cy={d.cy} r="1.6" fill="currentColor" />
+  ))}
+
+  {/* ── Outer bounding rectangle ─────────────── */}
+  <rect x="0" y="0" width={W} height={H} stroke="currentColor" stroke-width="0.75" />
+
+  {/* ── Corner marks (bracket ticks at all four corners) ── */}
+  {/* Top-left */}
+  <line x1="0" y1="0" x2={TICK} y2="0" stroke="currentColor" stroke-width="1.25" />
+  <line x1="0" y1="0" x2="0" y2={TICK} stroke="currentColor" stroke-width="1.25" />
+  {/* Top-right */}
+  <line x1={W} y1="0" x2={W - TICK} y2="0" stroke="currentColor" stroke-width="1.25" />
+  <line x1={W} y1="0" x2={W} y2={TICK} stroke="currentColor" stroke-width="1.25" />
+  {/* Bottom-left */}
+  <line x1="0" y1={H} x2={TICK} y2={H} stroke="currentColor" stroke-width="1.25" />
+  <line x1="0" y1={H} x2="0" y2={H - TICK} stroke="currentColor" stroke-width="1.25" />
+  {/* Bottom-right */}
+  <line x1={W} y1={H} x2={W - TICK} y2={H} stroke="currentColor" stroke-width="1.25" />
+  <line x1={W} y1={H} x2={W} y2={H - TICK} stroke="currentColor" stroke-width="1.25" />
+
+  {/* ── Inner offset rectangle ────────────────── */}
+  <rect
+    x="28"
+    y="28"
+    width={W - 56}
+    height={H - 56}
+    stroke="currentColor"
+    stroke-width="0.4"
+    opacity="0.45"
+  />
+
+  {/* ── Center crosshair ─────────────────────── */}
+  <line
+    x1="0" y1={MID_Y} x2={W} y2={MID_Y}
+    stroke="currentColor" stroke-width="0.5" opacity="0.4"
+  />
+  <line
+    x1={MID_X} y1="0" x2={MID_X} y2={H}
+    stroke="currentColor" stroke-width="0.5" opacity="0.4"
+  />
+  {/* Center circle */}
+  <circle cx={MID_X} cy={MID_Y} r="5" stroke="currentColor" stroke-width="0.6" opacity="0.6" />
+  <circle cx={MID_X} cy={MID_Y} r="1.5" fill="currentColor" opacity="0.6" />
+
+  {/* ── Edge midpoint tick marks ──────────────── */}
+  <line x1={MID_X - 6} y1="0" x2={MID_X + 6} y2="0" stroke="currentColor" stroke-width="1" />
+  <line x1={MID_X - 6} y1={H} x2={MID_X + 6} y2={H} stroke="currentColor" stroke-width="1" />
+  <line x1="0" y1={MID_Y - 6} x2="0" y2={MID_Y + 6} stroke="currentColor" stroke-width="1" />
+  <line x1={W} y1={MID_Y - 6} x2={W} y2={MID_Y + 6} stroke="currentColor" stroke-width="1" />
+
+  {/* ── Quarter tick marks ────────────────────── */}
+  <line x1={W / 4} y1="0" x2={W / 4} y2="8" stroke="currentColor" stroke-width="0.6" opacity="0.5" />
+  <line x1={W * 3 / 4} y1="0" x2={W * 3 / 4} y2="8" stroke="currentColor" stroke-width="0.6" opacity="0.5" />
+  <line x1={W / 4} y1={H} x2={W / 4} y2={H - 8} stroke="currentColor" stroke-width="0.6" opacity="0.5" />
+  <line x1={W * 3 / 4} y1={H} x2={W * 3 / 4} y2={H - 8} stroke="currentColor" stroke-width="0.6" opacity="0.5" />
+</svg>

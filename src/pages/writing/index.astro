@@ -1,6 +1,5 @@
 ---
 import Base from '../../layouts/Base.astro';
-import DotGrid from '../../components/DotGrid.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -12,24 +11,35 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   description="Articles on ML systems, infrastructure, and software engineering."
 >
   <div class="max-w-5xl mx-auto px-6 py-16">
-    {/* Page header */}
-    <header class="mb-16 relative">
-      <DotGrid
-        rows={4}
-        cols={6}
-        gap={16}
-        class="absolute right-0 top-0 text-faint opacity-30 hidden sm:block"
-      />
-      <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
-        // writing
-      </p>
-      <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
-        Writing
-      </h1>
-      <p class="text-muted mt-4 max-w-lg leading-relaxed">
-        Notes and articles on ML systems, infrastructure, software engineering,
-        and whatever I'm currently building or thinking about.
-      </p>
+
+    {/* Page header — background: horizontal ruled lines (engineering paper) */}
+    <header class="mb-16 relative overflow-hidden pb-2">
+      {/* Ruled lines spanning the full header area */}
+      <svg
+        class="absolute inset-0 w-full h-full text-faint opacity-[0.20] pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <defs>
+          <pattern id="writing-ruled" x="0" y="0" width="2000" height="28" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="2000" y2="0" stroke="currentColor" stroke-width="0.6" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#writing-ruled)" />
+      </svg>
+
+      <div class="relative z-10">
+        <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
+          // writing
+        </p>
+        <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
+          Writing
+        </h1>
+        <p class="text-muted mt-4 max-w-lg leading-relaxed">
+          Notes and articles on ML systems, infrastructure, software engineering,
+          and whatever I'm currently building or thinking about.
+        </p>
+      </div>
     </header>
 
     {/* Post list */}
@@ -62,7 +72,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
                   {post.data.tags.length > 0 && (
                     <div class="flex flex-wrap gap-1.5">
                       {post.data.tags.map((tag) => (
-                        <span class="font-mono text-xs text-faint border border-border px-1.5 py-0.5">
+                        <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-0.5">
                           {tag}
                         </span>
                       ))}

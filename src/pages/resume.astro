@@ -1,6 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
-import GeoAccent from '../components/GeoAccent.astro';
+
+// Fine dot grid — 34 cols × 8 rows at 28px, full-width backdrop
+const COLS = 34;
+const ROWS = 8;
+const GAP = 28;
+const gridDots = Array.from({ length: COLS * ROWS }, (_, i) => ({
+  cx: (i % COLS) * GAP + GAP / 2,
+  cy: Math.floor(i / COLS) * GAP + GAP / 2,
+}));
+const gridW = COLS * GAP;
+const gridH = ROWS * GAP;
 
 const skills = {
   'Programming & ML': [
@@ -84,47 +94,59 @@ const projects = [
   description="Resume for Sawyer Czupka — Software, ML, and Infrastructure Engineer."
 >
   <div class="max-w-5xl mx-auto px-6 py-16">
-    {/* Header */}
-    <header class="mb-12 relative">
-      <GeoAccent
-        variant="cross"
-        class="absolute right-0 top-0 text-faint opacity-15 hidden sm:block"
-      />
 
-      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
-        <div>
-          <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
-            // resume
-          </p>
-          <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
-            Sawyer Czupka
-          </h1>
-          <div class="flex flex-wrap gap-4 mt-4">
-            <a
-              href="mailto:sawyerczupka@gmail.com"
-              class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
-            >
-              sawyerczupka@gmail.com
-            </a>
-            <span class="text-faint font-mono text-xs">·</span>
-            <a
-              href="https://linkedin.com/in/sawyerczupka"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
-            >
-              linkedin.com/in/sawyerczupka
-            </a>
+    {/* Header — background: fine dot grid spanning full width */}
+    <header class="mb-12 relative overflow-hidden pb-4">
+      {/* Fine, dense dot grid — fills the header horizontally */}
+      <svg
+        class="absolute left-0 top-0 text-faint opacity-[0.18] pointer-events-none"
+        width={gridW}
+        height={gridH}
+        viewBox={`0 0 ${gridW} ${gridH}`}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        {gridDots.map((d) => (
+          <circle cx={d.cx} cy={d.cy} r="1" fill="currentColor" />
+        ))}
+      </svg>
+
+      <div class="relative z-10">
+        <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
+          // resume
+        </p>
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+          <div>
+            <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
+              Sawyer Czupka
+            </h1>
+            <div class="flex flex-wrap gap-4 mt-4">
+              <a
+                href="mailto:sawyerczupka@gmail.com"
+                class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
+              >
+                sawyerczupka@gmail.com
+              </a>
+              <span class="text-faint font-mono text-xs">·</span>
+              <a
+                href="https://linkedin.com/in/sawyerczupka"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
+              >
+                linkedin.com/in/sawyerczupka
+              </a>
+            </div>
           </div>
+          <a
+            href="/resume.pdf"
+            download
+            class="font-mono text-sm text-accent border border-accent px-5 py-2.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide self-start"
+          >
+            ↓ download PDF
+          </a>
         </div>
-
-        <a
-          href="/resume.pdf"
-          download
-          class="font-mono text-sm text-accent border border-accent px-5 py-2.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide self-start"
-        >
-          ↓ download PDF
-        </a>
       </div>
     </header>
 
@@ -141,7 +163,7 @@ const projects = [
             </h3>
             <div class="flex flex-wrap gap-2">
               {items.map((skill) => (
-                <span class="font-mono text-xs text-muted border border-border-strong px-2 py-1">
+                <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-1">
                   {skill}
                 </span>
               ))}
@@ -164,12 +186,8 @@ const projects = [
           </p>
         </div>
         <div class="text-right shrink-0">
-          <span class="font-mono text-xs text-faint tracking-wider block">
-            Sept 2021 – May 2025
-          </span>
-          <span class="font-mono text-xs text-accent tracking-wider block mt-1">
-            GPA: 3.6
-          </span>
+          <span class="font-mono text-xs text-faint tracking-wider block">Sept 2021 – May 2025</span>
+          <span class="font-mono text-xs text-accent tracking-wider block mt-1">GPA: 3.6</span>
         </div>
       </div>
     </section>
@@ -187,9 +205,7 @@ const projects = [
                 <h3 class="font-semibold text-text">{job.title}</h3>
                 <p class="text-sm text-accent mt-0.5">{job.org}</p>
               </div>
-              <span class="font-mono text-xs text-faint tracking-wider shrink-0">
-                {job.period}
-              </span>
+              <span class="font-mono text-xs text-faint tracking-wider shrink-0">{job.period}</span>
             </div>
             <ul class="space-y-2.5" role="list">
               {job.bullets.map((b) => (
@@ -213,24 +229,20 @@ const projects = [
         {projects.map((proj) => (
           <article>
             <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-4">
-              <div>
-                <h3 class="font-semibold text-text">
-                  {proj.url ? (
-                    <a
-                      href={proj.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="hover:text-accent transition-colors duration-150"
-                    >
-                      {proj.name}
-                      <span class="font-mono text-xs text-faint ml-2">↗</span>
-                    </a>
-                  ) : proj.name}
-                </h3>
-              </div>
-              <span class="font-mono text-xs text-faint tracking-wider shrink-0">
-                {proj.period}
-              </span>
+              <h3 class="font-semibold text-text">
+                {proj.url ? (
+                  <a
+                    href={proj.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-accent transition-colors duration-150"
+                  >
+                    {proj.name}
+                    <span class="font-mono text-xs text-faint ml-2">↗</span>
+                  </a>
+                ) : proj.name}
+              </h3>
+              <span class="font-mono text-xs text-faint tracking-wider shrink-0">{proj.period}</span>
             </div>
             <ul class="space-y-2.5" role="list">
               {proj.bullets.map((b) => (

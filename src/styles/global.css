@@ -22,9 +22,9 @@
   --color-border-strong: #2b2b2b;
 
   /* Text */
-  --color-text: #e8e8e8;
-  --color-muted: #888888;
-  --color-faint: #3d3d3d;
+  --color-text: #eeeeee;
+  --color-muted: #b0b0b0;
+  --color-faint: #666666;
 
   /* Fonts */
   --font-sans: "Space Grotesk", system-ui, sans-serif;

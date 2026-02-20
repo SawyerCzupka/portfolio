@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<ul class="space-y-0" role="list">
+  {
+    posts.map((post) => {
+      const slug = post.id.replace(/\.(md|mdx)$/, "");
+      const dateStr = post.data.date.toISOString().slice(0, 10);
+      return (
+        // <li class="border-t border-border">
+        <a
+          href={`/writing/${slug}`}
+          class="group flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6 py-5 hover:bg-surface/50 -mx-4 px-4 transition-colors duration-150"
+        >
+          <time
+            datetime={dateStr}
+            class="font-mono text-xs text-faint tracking-wider shrink-0 pt-0.5"
+          >
+            {dateStr}
+          </time>
+          <div class="flex-1">
+            <span class="text-base font-medium text-text group-hover:text-accent transition-colors duration-150">
+              {post.data.title}
+            </span>
+            <p class="text-sm text-muted mt-1 leading-relaxed">
+              {post.data.description}
+            </p>
+          </div>
+          <span class="font-mono text-xs text-faint group-hover:text-accent transition-colors duration-150 shrink-0">
+            →
+          </span>
+        </a>
+        // </li>
+      );
+    })
+  }
+</ul>
