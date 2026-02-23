@@ -63,7 +63,7 @@
   /* ─── Prose (blog post content) ─── */
   .prose {
     color: var(--color-text);
-    max-width: 68ch;
+    /* max-width: 68ch; */
   }
 
   .prose h1,

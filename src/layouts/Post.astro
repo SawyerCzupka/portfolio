@@ -1,6 +1,6 @@
 ---
-import Base from './Base.astro';
-import GeoAccent from '../components/GeoAccent.astro';
+import Base from "./Base.astro";
+import GeoAccent from "../components/GeoAccent.astro";
 
 interface Props {
   frontmatter: {
@@ -16,8 +16,11 @@ const { frontmatter } = Astro.props;
 const dateStr = frontmatter.date.toISOString().slice(0, 10);
 ---
 
-<Base title={`${frontmatter.title} — Sawyer Czupka`} description={frontmatter.description}>
-  <article class="max-w-5xl mx-auto px-6 py-16">
+<Base
+  title={`${frontmatter.title} — Sawyer Czupka`}
+  description={frontmatter.description}
+>
+  <article class="max-w-4xl mx-auto px-6 py-16">
     {/* Back link */}
     <a
       href="/writing"
@@ -27,22 +30,30 @@ const dateStr = frontmatter.date.toISOString().slice(0, 10);
     </a>
 
     {/* Header */}
-    <header class="mb-12 relative">
-      <GeoAccent variant="corner" class="absolute right-0 top-0 text-faint opacity-50" />
+    <header class="mb-8 relative">
+      <GeoAccent
+        variant="corner"
+        class="absolute right-0 top-0 text-faint opacity-50"
+      />
 
       <div class="flex items-center gap-4 mb-6">
-        <time datetime={dateStr} class="font-mono text-xs text-muted tracking-wider">
+        <time
+          datetime={dateStr}
+          class="font-mono text-xs text-muted tracking-wider"
+        >
           {dateStr}
         </time>
-        {frontmatter.tags.length > 0 && (
-          <div class="flex gap-2 flex-wrap">
-            {frontmatter.tags.map((tag) => (
-              <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-0.5">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+        {
+          frontmatter.tags.length > 0 && (
+            <div class="flex gap-2 flex-wrap">
+              {frontmatter.tags.map((tag) => (
+                <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-0.5">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )
+        }
       </div>
 
       <h1 class="text-3xl sm:text-4xl font-bold leading-tight text-text mb-4">
@@ -52,7 +63,7 @@ const dateStr = frontmatter.date.toISOString().slice(0, 10);
         {frontmatter.description}
       </p>
 
-      <div class="mt-8 border-t border-border-strong" />
+      <div class="mt-8 border-t border-border-strong"></div>
     </header>
 
     {/* Content */}

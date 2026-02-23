@@ -23,7 +23,7 @@
     "subtitle": "Production-grade self-hosted infrastructure",
     "period": "Jul 2023 - Present",
     "url": null,
-    "featured": false,
+    "featured": true,
     "teaser": "Production-grade homelab: 116-pod Kubernetes cluster on Proxmox, GitOps via ArgoCD, Terraform/Packer infra-as-code, and automated TLS.",
     "description": "A production-grade homelab running on Proxmox with 6 VMs and a 116-pod Kubernetes cluster, hosting a variety of self-managed services. Everything is treated as infrastructure-as-code — provisioning, configuration, and deployment are all repeatable and version-controlled.",
     "highlights": [

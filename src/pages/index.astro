@@ -16,14 +16,14 @@ const featuredProjects = await getCollection(
 
 <Base title="Sawyer Czupka">
   {/* ── Hero ─────────────────────────────────────────────── */}
-  <section class="max-w-5xl mx-auto px-6 pt-16 pb-36 relative overflow-hidden">
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-24 relative overflow-hidden">
     {/* Background: large dot grid + geometric composition, right half */}
     <HeroBackground
       class="hidden lg:block absolute -right-6 -top-4 text-faint opacity-[0.22] pointer-events-none"
     />
 
     {/* Content floats above the background */}
-    <div class="relative z-10 max-w-xl">
+    <div class="relative z-10 max-w-2xl">
       <p class="font-mono text-xs text-accent tracking-widest mb-6 uppercase">
         // portfolio
       </p>
@@ -41,15 +41,27 @@ const featuredProjects = await getCollection(
 
       <p class="text-xl sm:text-2xl font-medium text-muted leading-snug mb-6">
         Software Engineer.<br />
-        ML Systems · Infrastructure · Full-stack.
+        Full-stack · ML Systems · Infrastructure.
       </p>
 
       <p class="text-base text-muted leading-relaxed mb-10">
-        I build intelligent systems at the intersection of machine learning,
-        backend engineering, and production infrastructure — from RAG pipelines
-        and LLM evaluation frameworks to Kubernetes clusters and CI/CD
-        automation. Recently finished my BS in Computer Science & Data Science
-        at William & Mary, Cum Laude.
+        I build production software across backend engineering, ML systems, and
+        cloud infrastructure. I'm a backend-first full-stack engineer — API
+        design, data pipelines, and system architecture are where I'm most at
+        home, though I'm fully capable on the frontend too.
+        <br /><br />
+        My ML work spans both applied systems and model development. On the applied
+        side I've built RAG pipelines, LLM evaluation frameworks, and production model-serving
+        infrastructure. On the research side I've trained models from scratch — dense
+        neural networks, graph neural networks, transformers, reinforcement learning
+        agents, and computer vision classifiers — through my work at William & Mary.
+        <br /><br />
+        I'm also comfortable managing the full infrastructure stack: Kubernetes clusters,
+        CI/CD automation, cloud deployments on Azure and Cloudflare, Terraform-provisioned
+        environments, and self-hosted homelab services.
+        <br /><br />
+        Recently finished my BS in Computer Science & Data Science at William & Mary,
+        Cum Laude.
       </p>
 
       <div class="flex flex-wrap gap-4">
@@ -138,7 +150,11 @@ const featuredProjects = await getCollection(
           </a>
         ))
       }
-      {featuredProjects.length % 2 !== 0 && <div class="bg-bg hidden sm:block" />}
+      {
+        featuredProjects.length % 2 !== 0 && (
+          <div class="bg-bg hidden sm:block" />
+        )
+      }
     </div>
   </section>
 </Base>

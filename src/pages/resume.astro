@@ -1,5 +1,5 @@
 ---
-import Base from '../layouts/Base.astro';
+import Base from "../layouts/Base.astro";
 
 // Fine dot grid — 34 cols × 8 rows at 28px, full-width backdrop
 const COLS = 34;
@@ -13,77 +13,110 @@ const gridW = COLS * GAP;
 const gridH = ROWS * GAP;
 
 const skills = {
-  'Programming & ML': [
-    'Python', 'TypeScript', 'JavaScript', 'Java', 'C++', 'Rust',
-    'PyTorch', 'Scikit-Learn', 'Pandas', 'Hugging Face',
-    'React', 'Vue', 'FastAPI', 'Django', 'SQLAlchemy',
-    'PostgreSQL', 'TimescaleDB', 'MongoDB', 'Qdrant',
-    'LlamaIndex', 'DeepEval', 'vLLM', 'Azure OpenAI', 'Git',
+  "Programming & ML": [
+    "Python",
+    "TypeScript",
+    "JavaScript",
+    "Java",
+    "C++",
+    "Rust",
+    "PyTorch",
+    "Scikit-Learn",
+    "Pandas",
+    "Hugging Face",
+    "React",
+    "Vue",
+    "FastAPI",
+    "Django",
+    "SQLAlchemy",
+    "PostgreSQL",
+    "TimescaleDB",
+    "MongoDB",
+    "Qdrant",
+    "LlamaIndex",
+    "DeepEval",
+    "vLLM",
+    "Azure OpenAI",
+    "Git",
   ],
-  'DevOps & Infrastructure': [
-    'Docker', 'Kubernetes', 'Terraform', 'Packer', 'ArgoCD',
-    'GitHub Actions', 'CI/CD', 'Prometheus', 'Grafana', 'Traefik',
-    'MLflow', 'Azure', 'AWS', 'AWS Lambda', 'Linux', 'Nginx', "Let's Encrypt",
+  "DevOps & Infrastructure": [
+    "Docker",
+    "Kubernetes",
+    "Terraform",
+    "Packer",
+    "ArgoCD",
+    "GitHub Actions",
+    "CI/CD",
+    "Prometheus",
+    "Grafana",
+    "Traefik",
+    "MLflow",
+    "Azure",
+    "AWS",
+    "AWS Lambda",
+    "Linux",
+    "Nginx",
+    "Let's Encrypt",
   ],
 };
 
 const experience = [
   {
-    title: 'Software Engineering Intern',
-    org: 'Luminexis AI / Threat Tec',
-    period: 'Aug 2025 – Dec 2025',
+    title: "Software Engineering Intern",
+    org: "Luminexis AI / Threat Tec",
+    period: "Aug 2025 – Dec 2025",
     bullets: [
-      'Built full-stack React/FastAPI application with JWT authentication, role-based access control, admin dashboards, and ROI tracking tools for identifying AI automation opportunities.',
-      'Engineered LLM-powered document analysis pipeline using Azure OpenAI and Document Intelligence to extract requirements, risk factors, and action items from 140+ contract PDFs — reducing manual review time from hours to minutes per document.',
-      'Deployed production RAG chatbot with Qdrant vector database and LlamaIndex achieving 70–80% on RAGAS evaluation metrics for domain-specific Q&A across configurable knowledge bases.',
-      'Provisioned 4-environment Azure infrastructure (Dev, Staging, Demo, Production) using Terraform with shared modules, managing Container Apps, PostgreSQL, Key Vault, AI Foundry, and private networking; implemented CI/CD with GitHub Actions.',
+      "Built full-stack React/FastAPI application with JWT authentication, role-based access control, admin dashboards, and ROI tracking tools for identifying AI automation opportunities.",
+      "Engineered LLM-powered document analysis pipeline using Azure OpenAI and Document Intelligence to extract requirements, risk factors, and action items from 140+ contract PDFs — reducing manual review time from hours to minutes per document.",
+      "Deployed production RAG chatbot with Qdrant vector database and LlamaIndex achieving 70–80% on RAGAS evaluation metrics for domain-specific Q&A across configurable knowledge bases.",
+      "Provisioned 4-environment Azure infrastructure (Dev, Staging, Demo, Production) using Terraform with shared modules, managing Container Apps, PostgreSQL, Key Vault, AI Foundry, and private networking; implemented CI/CD with GitHub Actions.",
     ],
   },
   {
-    title: 'Machine Learning & Software Engineer',
-    org: 'Teamculture.ai / L10.tech',
-    period: 'Jan 2024 – Sept 2024',
+    title: "Machine Learning & Software Engineer",
+    org: "Teamculture.ai / L10.tech",
+    period: "Jan 2024 – Sept 2024",
     bullets: [
-      'Developed serverless RAG evaluation system using AWS Lambda, API Gateway, and DeepEval to automate performance monitoring — reducing evaluation runtime from manual testing to an automated pipeline.',
-      'Built Vue/FastAPI interface for creating evaluations and curating golden example datasets, enabling systematic quality measurement and iterative improvement of AI services at scale.',
+      "Developed serverless RAG evaluation system using AWS Lambda, API Gateway, and DeepEval to automate performance monitoring — reducing evaluation runtime from manual testing to an automated pipeline.",
+      "Built Vue/FastAPI interface for creating evaluations and curating golden example datasets, enabling systematic quality measurement and iterative improvement of AI services at scale.",
     ],
   },
   {
-    title: 'Machine Learning Technical Lead',
-    org: 'GeoLab @ William & Mary',
-    period: 'Jan 2023 – May 2025',
+    title: "Machine Learning Technical Lead",
+    org: "GeoLab @ William & Mary",
+    period: "Jan 2023 – May 2025",
     bullets: [
-      'Led cross-functional ML integration across frontend, backend, and ML subteams for the SCOPE research platform, establishing technical requirements and coordinating implementation of RAG capabilities.',
-      'Architected microservice-based RAG system on Kubernetes using Qdrant, vLLM, LlamaIndex, and FastAPI; built custom document processing pipeline with Vision-Language Models (Qwen-2.5-VL) for extracting text and structure from complex PDF/DOCX documents — reducing parsing errors by over 50%.',
+      "Led cross-functional ML integration across frontend, backend, and ML subteams for the SCOPE research platform, establishing technical requirements and coordinating implementation of RAG capabilities.",
+      "Architected microservice-based RAG system on Kubernetes using Qdrant, vLLM, LlamaIndex, and FastAPI; built custom document processing pipeline with Vision-Language Models (Qwen-2.5-VL) for extracting text and structure from complex PDF/DOCX documents — reducing parsing errors by over 50%.",
     ],
   },
   {
-    title: 'Machine Learning & Software Engineer Intern',
-    org: 'The World Bank & GEF',
-    period: 'May 2023 – Sept 2023',
+    title: "Machine Learning & Software Engineer Intern",
+    org: "The World Bank & GEF",
+    period: "May 2023 – Sept 2023",
     bullets: [
-      'Built RAG-based system automating analysis of 24,000+ GEF project documents for large-scale socioeconomic impact evaluation — enabling data-driven funding allocation and strategic planning decisions for the first time.',
+      "Built RAG-based system automating analysis of 24,000+ GEF project documents for large-scale socioeconomic impact evaluation — enabling data-driven funding allocation and strategic planning decisions for the first time.",
     ],
   },
 ];
 
 const projects = [
   {
-    name: 'LapEvo: iRacing Telemetry Tracker & AI Racing Coach',
-    url: 'https://lapevo.com',
-    period: 'Jan 2025 – Present',
+    name: "LapEvo: iRacing Telemetry Tracker & AI Racing Coach",
+    url: "https://lapevo.com",
+    period: "Jan 2025 – Present",
     bullets: [
-      'Architected real-time telemetry pipeline ingesting iRacing simulator data at 60Hz using Python/FastAPI microservices with TimescaleDB hypertables and event-driven async processing.',
-      'Built full-stack monorepo with React 19/TypeScript dashboard, auto-generated OpenAPI client via Orval, and Docker Compose orchestration; implemented pytest + testcontainers for isolated integration testing enabling CI/CD without live game dependencies.',
+      "Architected real-time telemetry pipeline ingesting iRacing simulator data at 60Hz using Python/FastAPI microservices with TimescaleDB hypertables and event-driven async processing.",
+      "Built full-stack monorepo with React 19/TypeScript dashboard, auto-generated OpenAPI client via Orval, and Docker Compose orchestration; implemented pytest + testcontainers for isolated integration testing enabling CI/CD without live game dependencies.",
     ],
   },
   {
-    name: 'Personal Homelab Infrastructure',
+    name: "Personal Homelab Infrastructure",
     url: null,
-    period: 'Jul 2023 – Present',
+    period: "Jul 2023 – Present",
     bullets: [
-      'Maintain production-grade homelab with 6 VMs and 116-pod Kubernetes cluster on Proxmox, hosting Vaultwarden, Technitium DNS, Jellyfin, and Gitea with Traefik reverse proxy and automated Let\'s Encrypt TLS.',
-      'Leverage infrastructure-as-code with Packer, Terraform, Kubernetes manifests, and ArgoCD for GitOps-based continuous deployment — enabling rapid experimentation while maintaining reproducible environments.',
+      "Maintain production-grade homelab with 6 VMs and 116-pod Kubernetes cluster on Proxmox, hosting Vaultwarden, Technitium DNS, Jellyfin, and Gitea with Traefik reverse proxy and automated Let's Encrypt TLS.",
+      "Leverage infrastructure-as-code with Packer, Terraform, Kubernetes manifests, and ArgoCD for GitOps-based continuous deployment — enabling rapid experimentation while maintaining reproducible environments.",
     ],
   },
 ];
@@ -94,7 +127,6 @@ const projects = [
   description="Resume for Sawyer Czupka — Software, ML, and Infrastructure Engineer."
 >
   <div class="max-w-5xl mx-auto px-6 py-16">
-
     {/* Header — background: fine dot grid spanning full width */}
     <header class="mb-12 relative overflow-hidden pb-4">
       {/* Fine, dense dot grid — fills the header horizontally */}
@@ -107,16 +139,20 @@ const projects = [
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
-        {gridDots.map((d) => (
-          <circle cx={d.cx} cy={d.cy} r="1" fill="currentColor" />
-        ))}
+        {
+          gridDots.map((d) => (
+            <circle cx={d.cx} cy={d.cy} r="1" fill="currentColor" />
+          ))
+        }
       </svg>
 
       <div class="relative z-10">
         <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
           // resume
         </p>
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+        <div
+          class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6"
+        >
           <div>
             <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
               Sawyer Czupka
@@ -140,7 +176,7 @@ const projects = [
             </div>
           </div>
           <a
-            href="/resume.pdf"
+            href="/sawyerczupka_resume.pdf"
             download
             class="font-mono text-sm text-accent border border-accent px-5 py-2.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide self-start"
           >
@@ -152,33 +188,41 @@ const projects = [
 
     {/* ── Skills ─────────────────────────────────────────── */}
     <section class="mb-12">
-      <h2 class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border">
+      <h2
+        class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border"
+      >
         // skills
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        {Object.entries(skills).map(([category, items]) => (
-          <div>
-            <h3 class="font-mono text-xs text-accent tracking-wider mb-3 uppercase">
-              {category}
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              {items.map((skill) => (
-                <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-1">
-                  {skill}
-                </span>
-              ))}
+        {
+          Object.entries(skills).map(([category, items]) => (
+            <div>
+              <h3 class="font-mono text-xs text-accent tracking-wider mb-3 uppercase">
+                {category}
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {items.map((skill) => (
+                  <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-1">
+                    {skill}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </section>
 
     {/* ── Education ──────────────────────────────────────── */}
     <section class="mb-12">
-      <h2 class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border">
+      <h2
+        class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border"
+      >
         // education
       </h2>
-      <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
+      <div
+        class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2"
+      >
         <div>
           <h3 class="font-semibold text-text">College of William & Mary</h3>
           <p class="text-sm text-muted mt-1">
@@ -186,74 +230,92 @@ const projects = [
           </p>
         </div>
         <div class="text-right shrink-0">
-          <span class="font-mono text-xs text-faint tracking-wider block">Sept 2021 – May 2025</span>
-          <span class="font-mono text-xs text-accent tracking-wider block mt-1">GPA: 3.6</span>
+          <span class="font-mono text-xs text-faint tracking-wider block"
+            >Sept 2021 – May 2025</span
+          >
+          <span class="font-mono text-xs text-accent tracking-wider block mt-1"
+            >GPA: 3.6</span
+          >
         </div>
       </div>
     </section>
 
     {/* ── Experience ─────────────────────────────────────── */}
     <section class="mb-12">
-      <h2 class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border">
+      <h2
+        class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border"
+      >
         // experience
       </h2>
       <div class="space-y-10">
-        {experience.map((job) => (
-          <article>
-            <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-4">
-              <div>
-                <h3 class="font-semibold text-text">{job.title}</h3>
-                <p class="text-sm text-accent mt-0.5">{job.org}</p>
+        {
+          experience.map((job) => (
+            <article>
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-4">
+                <div>
+                  <h3 class="font-semibold text-text">{job.title}</h3>
+                  <p class="text-sm text-accent mt-0.5">{job.org}</p>
+                </div>
+                <span class="font-mono text-xs text-faint tracking-wider shrink-0">
+                  {job.period}
+                </span>
               </div>
-              <span class="font-mono text-xs text-faint tracking-wider shrink-0">{job.period}</span>
-            </div>
-            <ul class="space-y-2.5" role="list">
-              {job.bullets.map((b) => (
-                <li class="flex gap-3 text-sm text-muted leading-relaxed">
-                  <span class="text-faint shrink-0 font-mono mt-0.5">—</span>
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
+              <ul class="space-y-2.5" role="list">
+                {job.bullets.map((b) => (
+                  <li class="flex gap-3 text-sm text-muted leading-relaxed">
+                    <span class="text-faint shrink-0 font-mono mt-0.5">—</span>
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
       </div>
     </section>
 
     {/* ── Projects ───────────────────────────────────────── */}
     <section>
-      <h2 class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border">
+      <h2
+        class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border"
+      >
         // personal projects
       </h2>
       <div class="space-y-8">
-        {projects.map((proj) => (
-          <article>
-            <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-4">
-              <h3 class="font-semibold text-text">
-                {proj.url ? (
-                  <a
-                    href={proj.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="hover:text-accent transition-colors duration-150"
-                  >
-                    {proj.name}
-                    <span class="font-mono text-xs text-faint ml-2">↗</span>
-                  </a>
-                ) : proj.name}
-              </h3>
-              <span class="font-mono text-xs text-faint tracking-wider shrink-0">{proj.period}</span>
-            </div>
-            <ul class="space-y-2.5" role="list">
-              {proj.bullets.map((b) => (
-                <li class="flex gap-3 text-sm text-muted leading-relaxed">
-                  <span class="text-faint shrink-0 font-mono mt-0.5">—</span>
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
+        {
+          projects.map((proj) => (
+            <article>
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-4">
+                <h3 class="font-semibold text-text">
+                  {proj.url ? (
+                    <a
+                      href={proj.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="hover:text-accent transition-colors duration-150"
+                    >
+                      {proj.name}
+                      <span class="font-mono text-xs text-faint ml-2">↗</span>
+                    </a>
+                  ) : (
+                    proj.name
+                  )}
+                </h3>
+                <span class="font-mono text-xs text-faint tracking-wider shrink-0">
+                  {proj.period}
+                </span>
+              </div>
+              <ul class="space-y-2.5" role="list">
+                {proj.bullets.map((b) => (
+                  <li class="flex gap-3 text-sm text-muted leading-relaxed">
+                    <span class="text-faint shrink-0 font-mono mt-0.5">—</span>
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
       </div>
     </section>
   </div>
