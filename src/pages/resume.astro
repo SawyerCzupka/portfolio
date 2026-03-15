@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
 
 // Fine dot grid — 34 cols × 8 rows at 28px, full-width backdrop
 const COLS = 34;
@@ -13,7 +14,7 @@ const gridW = COLS * GAP;
 const gridH = ROWS * GAP;
 
 const skills = {
-  "Programming & ML": [
+  "Programming & ML/Modeling": [
     "Python",
     "TypeScript",
     "JavaScript",
@@ -21,9 +22,10 @@ const skills = {
     "C++",
     "Rust",
     "PyTorch",
+    "PyTorch Geometric",
     "Scikit-Learn",
     "Pandas",
-    "Hugging Face",
+    "Hugging Face Transformers",
     "React",
     "Vue",
     "FastAPI",
@@ -62,7 +64,7 @@ const skills = {
 
 const experience = [
   {
-    title: "Software Engineering Intern",
+    title: "Software Engineering Intern (Sole Engineer)",
     org: "Luminexis AI / Threat Tec",
     period: "Aug 2025 – Dec 2025",
     bullets: [
@@ -100,9 +102,14 @@ const experience = [
   },
 ];
 
+const academicEntries = await getCollection("projects", (e) => e.data.academic === true);
+const academicProjects = academicEntries
+  .map((e) => ({ id: e.id, ...e.data }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
 const projects = [
   {
-    name: "LapEvo: iRacing Telemetry Tracker & AI Racing Coach",
+    name: "LapEvo: iRacing Telemetry Tracker & Real-time Coach",
     url: "https://lapevo.com",
     period: "Jan 2025 – Present",
     bullets: [
@@ -124,7 +131,7 @@ const projects = [
 
 <Base
   title="Resume — Sawyer Czupka"
-  description="Resume for Sawyer Czupka — Software, ML, and Infrastructure Engineer."
+  description="Resume for Sawyer Czupka — Software Engineer, ML Engineer, and DevOps / Infrastructure Engineer."
 >
   <div class="max-w-5xl mx-auto px-6 py-16">
     {/* Header — background: fine dot grid spanning full width */}
@@ -175,13 +182,34 @@ const projects = [
               </a>
             </div>
           </div>
-          <a
-            href="/sawyerczupka_resume.pdf"
-            download
-            class="font-mono text-sm text-accent border border-accent px-5 py-2.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide self-start"
-          >
-            ↓ download PDF
-          </a>
+          <div class="flex flex-col gap-2 self-start">
+            <p class="font-mono text-xs text-muted tracking-widest uppercase">
+              // download resume
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <a
+                href="/sawyerczupka_resume_swe.pdf"
+                download
+                class="font-mono text-xs text-accent border border-accent px-3 py-1.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide"
+              >
+                ↓ swe
+              </a>
+              <a
+                href="/sawyerczupka_resume_mle.pdf"
+                download
+                class="font-mono text-xs text-accent border border-accent px-3 py-1.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide"
+              >
+                ↓ ml engineer
+              </a>
+              <a
+                href="/sawyerczupka_resume_devops.pdf"
+                download
+                class="font-mono text-xs text-accent border border-accent px-3 py-1.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide"
+              >
+                ↓ devops
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -275,7 +303,7 @@ const projects = [
     </section>
 
     {/* ── Projects ───────────────────────────────────────── */}
-    <section>
+    <section class="mb-12">
       <h2
         class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border"
       >
@@ -313,6 +341,30 @@ const projects = [
                   </li>
                 ))}
               </ul>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    {/* ── Academic Projects ──────────────────────────────── */}
+    <section class="mt-12">
+      <h2
+        class="font-mono text-xs text-muted tracking-widest uppercase mb-6 pb-3 border-b border-border"
+      >
+        // academic projects
+      </h2>
+      <div class="space-y-6">
+        {
+          academicProjects.map((proj) => (
+            <article>
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
+                <h3 class="font-semibold text-text text-sm">{proj.name}</h3>
+                <span class="font-mono text-xs text-faint tracking-wider shrink-0">
+                  {proj.period}
+                </span>
+              </div>
+              <p class="text-sm text-muted leading-relaxed">{proj.teaser}</p>
             </article>
           ))
         }

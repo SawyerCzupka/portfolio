@@ -24,6 +24,7 @@ const projects = defineCollection({
     description: z.string(),
     highlights: z.array(z.string()),
     stack: z.array(z.string()),
+    academic: z.boolean().default(false),
   }),
 });
 

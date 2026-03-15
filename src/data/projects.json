@@ -2,7 +2,7 @@
   {
     "id": "lapevo",
     "name": "LapEvo",
-    "subtitle": "iRacing Telemetry Tracker & AI Racing Coach",
+    "subtitle": "iRacing Telemetry Tracker & Real-time Coach",
     "period": "Jan 2025 - Present",
     "url": "https://lapevo.com",
     "featured": true,
@@ -34,5 +34,103 @@
       "Prometheus + Grafana observability stack for cluster and service metrics"
     ],
     "stack": ["Kubernetes", "Proxmox", "Terraform", "Packer", "ArgoCD", "Traefik", "Prometheus", "Grafana", "Linux"]
+  },
+  {
+    "id": "gnn-molecular-properties",
+    "name": "GNN Molecular Property Prediction",
+    "subtitle": "Predicting quantum molecular properties on the QM9 dataset",
+    "period": "2021 – 2025",
+    "url": null,
+    "featured": false,
+    "academic": true,
+    "teaser": "Graph Neural Network trained on the QM9 dataset to predict quantum-chemical molecular properties.",
+    "description": "Trained a Graph Neural Network using PyTorch Geometric on the QM9 dataset to predict quantum-chemical properties of small organic molecules. The model operates directly on molecular graphs, representing atoms as nodes and bonds as edges.",
+    "highlights": [
+      "QM9 dataset: 130k+ small molecules with 19 quantum-chemical target properties",
+      "Molecular graph representation with atom/bond features as node and edge attributes",
+      "Graph-level regression using message-passing neural network architecture"
+    ],
+    "stack": ["PyTorch Geometric", "PyTorch", "Python"]
+  },
+  {
+    "id": "transformer-sentiment-analysis",
+    "name": "Transformer Sentiment Analysis",
+    "subtitle": "Fine-tuned transformer model for text sentiment classification",
+    "period": "2021 – 2025",
+    "url": null,
+    "featured": false,
+    "academic": true,
+    "teaser": "Fine-tuned a pre-trained transformer model for multi-class text sentiment classification.",
+    "description": "Fine-tuned a pre-trained transformer model for sentiment classification on text data. Explored tokenization, attention mechanisms, and transfer learning as applied to NLP classification tasks.",
+    "highlights": [
+      "Transfer learning via fine-tuning a pre-trained transformer on labeled sentiment data",
+      "Explored attention weight visualization to interpret model decisions"
+    ],
+    "stack": ["PyTorch", "Hugging Face Transformers", "Python"]
+  },
+  {
+    "id": "cnn-image-classification",
+    "name": "CNN Image Classification & Regression",
+    "subtitle": "Convolutional neural networks for vision classification and regression",
+    "period": "2021 – 2025",
+    "url": null,
+    "featured": false,
+    "academic": true,
+    "teaser": "Built and trained CNNs for both image classification and continuous regression tasks.",
+    "description": "Designed and trained convolutional neural networks for image classification and regression tasks. Covered architectural decisions (depth, pooling, batch norm), training pipelines, and evaluation across both categorical and continuous output settings.",
+    "highlights": [
+      "Classification and regression heads on shared convolutional backbone",
+      "Data augmentation pipeline for improved generalization"
+    ],
+    "stack": ["PyTorch", "Python"]
+  },
+  {
+    "id": "network-traffic-classifier",
+    "name": "ML Network Traffic Classifier",
+    "subtitle": "Machine learning for network trace classification",
+    "period": "2021 – 2025",
+    "url": null,
+    "featured": false,
+    "academic": true,
+    "teaser": "ML classifier for identifying network traffic types from packet trace features.",
+    "description": "Built a machine learning classifier to identify and categorize network traffic types from packet-level trace features. Applied feature engineering on raw packet captures and evaluated multiple classification approaches.",
+    "highlights": [
+      "Feature extraction from raw packet trace data (timing, size, protocol)",
+      "Comparative evaluation of ML classifiers on traffic categorization"
+    ],
+    "stack": ["Python", "Scikit-Learn", "Pandas"]
+  },
+  {
+    "id": "time-series-forecasting",
+    "name": "Time Series Forecasting",
+    "subtitle": "Deep learning approaches to temporal sequence prediction",
+    "period": "2021 – 2025",
+    "url": null,
+    "featured": false,
+    "academic": true,
+    "teaser": "Implemented and compared deep learning models for multi-step time series forecasting.",
+    "description": "Implemented and compared deep learning architectures for time series forecasting, including recurrent and attention-based models. Explored sequence modeling, stationarity, and evaluation metrics for temporal prediction.",
+    "highlights": [
+      "Multi-step ahead forecasting with recurrent and transformer-based architectures",
+      "Time series preprocessing: differencing, normalization, sliding window batching"
+    ],
+    "stack": ["PyTorch", "Python", "Pandas"]
+  },
+  {
+    "id": "diffusion-model-generation",
+    "name": "Generative Modeling with Diffusion Models",
+    "subtitle": "Implementing diffusion-based generative models from scratch",
+    "period": "2021 – 2025",
+    "url": null,
+    "featured": false,
+    "academic": true,
+    "teaser": "Built and trained a diffusion model for image generation, implementing the forward noising and reverse denoising processes.",
+    "description": "Implemented a denoising diffusion probabilistic model (DDPM) for image generation. Covered the forward noising process, reverse denoising network (UNet), noise scheduling, and sampling procedures.",
+    "highlights": [
+      "Forward diffusion process with learned noise schedule",
+      "UNet denoising network for the reverse process",
+      "DDPM sampling for image generation"
+    ],
+    "stack": ["PyTorch", "Python"]
   }
 ]
