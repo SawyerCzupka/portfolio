@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import LabCanvas from "../components/LabCanvas.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -58,6 +59,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <ClientRouter />
   </head>
   <body class="sheet min-h-screen flex flex-col">
+    <LabCanvas />
     <Nav />
     <main class="flex-1 relative z-10">
       <slot />

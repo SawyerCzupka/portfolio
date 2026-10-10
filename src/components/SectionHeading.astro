@@ -9,7 +9,7 @@ interface Props {
 const { index, title, href, linkLabel } = Astro.props;
 ---
 
-<div class="flex items-end gap-4 mb-10">
+<div data-island="bare" class="flex items-end gap-4 mb-10">
   <span class="font-mono text-[11px] text-accent tracking-wide pb-1.5">{index}</span>
   <h2 class="font-serif text-3xl sm:text-4xl leading-none text-text">{title}</h2>
   <div class="flex-1 h-px bg-border-strong mb-1.5 relative">

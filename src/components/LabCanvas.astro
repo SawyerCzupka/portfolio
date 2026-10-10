@@ -1,0 +1,129 @@
+---
+// Ambient, site-wide evolving NCA drawn as a halftone glyph field that scrolls
+// with the page. Persisted across client-side navigation so the same world
+// keeps running. Drag on empty background erases; click inspects.
+---
+
+<div id="lab-layer" transition:persist class="lab-layer">
+  <canvas id="lab-canvas" aria-hidden="true" class="lab-canvas"></canvas>
+</div>
+
+<div id="lab-ui" transition:persist data-lab-ui class="fixed inset-0 z-40 pointer-events-none" hidden>
+  <svg
+    data-lab-reticle
+    class="absolute size-16 -translate-1/2 text-accent"
+    viewBox="0 0 64 64"
+    fill="none"
+    stroke="currentColor"
+    aria-hidden="true"
+  >
+    <circle cx="32" cy="32" r="20" stroke-width="0.75" stroke-dasharray="1 4" class="lab-spin" />
+    <path d="M32 4v12M32 48v12M4 32h12M48 32h12" stroke-width="1" />
+    <circle cx="32" cy="32" r="3" stroke-width="1" />
+  </svg>
+  <section
+    data-lab-card
+    class="absolute w-52 border border-border-strong bg-bg/90 backdrop-blur-sm px-4 pt-4 pb-3 font-mono text-[11px]"
+    aria-live="polite"
+  >
+    <span class="absolute -top-2 left-3 bg-bg px-1.5 text-[10px] tracking-wide text-faint">SPECIMEN</span>
+    <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5"></dl>
+  </section>
+</div>
+
+<style>
+  /* A page-tall layer holding a sticky canvas, rather than a fixed canvas, so the
+     canvas meets the layer's edge at either scroll extreme and rides the overscroll
+     bounce with the page. */
+  .lab-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .lab-canvas {
+    position: sticky;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.55;
+  }
+  :global([data-theme="light"]) .lab-canvas {
+    opacity: 0.7;
+  }
+  @media (max-width: 48rem) {
+    .lab-canvas {
+      opacity: 0.4;
+    }
+  }
+  .lab-spin {
+    transform-origin: 32px 32px;
+    animation: lab-spin 30s linear infinite;
+  }
+  @keyframes lab-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<script>
+  import { start, refresh, onStatus, onInspect, GLYPHS, type LabStatus } from "@/lib/lab";
+
+  const canvas = document.getElementById("lab-canvas") as HTMLCanvasElement | null;
+  const ui = document.getElementById("lab-ui")!;
+  const reticle = ui.querySelector<SVGElement>("[data-lab-reticle]")!;
+  const card = ui.querySelector<HTMLElement>("[data-lab-card]")!;
+  if (canvas && !start(canvas)) canvas.remove();
+
+  const age = (born: number) => {
+    const s = Math.floor((Date.now() - born) / 1000);
+    return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`;
+  };
+  let shown = "";
+  onInspect((i) => {
+    ui.hidden = !i;
+    if (!i) return;
+    reticle.style.left = card.style.left = `${i.x}px`;
+    reticle.style.top = `${i.y}px`;
+    // Sit beside the reticle, flipping left near the viewport edge.
+    const flip = i.x + 260 > innerWidth;
+    card.style.transform = `translate(${flip ? "calc(-100% - 40px)" : "40px"}, -50%)`;
+    card.style.top = `${Math.min(Math.max(i.y, 90), innerHeight - 90)}px`;
+    const s = i.species;
+    const rows: [string, string][] = s
+      ? [
+          ["id", `${GLYPHS[i.slot]} ${s.genome.id}`],
+          ["parent", s.genome.parent ?? "—"],
+          ["generation", String(s.genome.generation)],
+          ["territory", `${(s.share * 100).toFixed(1)}%`],
+          ["age", age(s.born)],
+          ["params", i.params.toLocaleString()],
+        ]
+      : [["id", i.id], ["status", "extinct"]];
+    const html = rows
+      .map(([k, v]) => `<dt class="text-faint">${k}</dt><dd class="text-text text-right tabular-nums">${v}</dd>`)
+      .join("");
+    if (html !== shown) card.querySelector("dl")!.innerHTML = shown = html;
+  });
+
+  const render = (s: LabStatus) => {
+    const row = document.querySelector<HTMLElement>("[data-lab-row]");
+    if (!row) return;
+    row.hidden = false;
+    row.querySelector("[data-lab-status]")!.textContent =
+      `generation ${s.generation.toLocaleString()} · ${s.species} species · lineage `;
+    row.querySelector("[data-lab-glyph]")!.textContent = GLYPHS[s.leader];
+    row.querySelector("[data-lab-lineage]")!.textContent = s.lineage;
+    row.querySelector("[data-lab-hub]")!.textContent = s.hub ?? "";
+  };
+  onStatus(render);
+  // Footer and page text are swapped on navigation: repaint status and re-measure islands.
+  document.addEventListener("astro:page-load", () => {
+    onStatus((s) => render(s))();
+    if (canvas?.isConnected) refresh();
+  });
+</script>
