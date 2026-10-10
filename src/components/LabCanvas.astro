@@ -71,13 +71,15 @@
 </style>
 
 <script>
-  import { start, refresh, onStatus, onInspect, GLYPHS, type LabStatus } from "@/lib/lab";
+  import { start, refresh, onStatus, onInspect, setHub, GLYPHS, type LabStatus } from "@/lib/lab";
+  import { startHubClient } from "@/lib/lab/hub-client";
 
   const canvas = document.getElementById("lab-canvas") as HTMLCanvasElement | null;
   const ui = document.getElementById("lab-ui")!;
   const reticle = ui.querySelector<SVGElement>("[data-lab-reticle]")!;
   const card = ui.querySelector<HTMLElement>("[data-lab-card]")!;
   if (canvas && !start(canvas)) canvas.remove();
+  else if (canvas) startHubClient(setHub);
 
   const age = (born: number) => {
     const s = Math.floor((Date.now() - born) / 1000);
