@@ -1,25 +1,20 @@
 ---
-import { Mail, Linkedin, Github } from '@lucide/astro';
-
 const year = new Date().getFullYear();
 
 const links = [
   {
     href: 'mailto:sawyerczupka@gmail.com',
     label: 'email',
-    icon: Mail,
     external: false,
   },
   {
     href: 'https://linkedin.com/in/sawyerczupka',
     label: 'linkedin',
-    icon: Linkedin,
     external: true,
   },
   {
     href: 'https://github.com/sawyerczupka',
     label: 'github',
-    icon: Github,
     external: true,
   },
 ];
@@ -31,17 +26,15 @@ const links = [
       © {year} SAWYER CZUPKA
     </span>
     <ul class="flex items-center gap-5" role="list">
-      {links.map(({ href, label, icon: Icon, external }) => (
+      {links.map(({ href, label, external }) => (
         <li>
           <a
             href={href}
             target={external ? '_blank' : undefined}
             rel={external ? 'noopener noreferrer' : undefined}
-            aria-label={label}
-            class="flex items-center gap-1.5 font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider group"
+            class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider group"
           >
-            <Icon size={14} class="shrink-0" />
-            <span class="hidden sm:inline">{label}</span>
+            {label}{external && ' ↗'}
           </a>
         </li>
       ))}
