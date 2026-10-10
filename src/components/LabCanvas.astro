@@ -1,0 +1,52 @@
+---
+// Ambient, site-wide evolving NCA drawn as a halftone glyph field. Persisted
+// across client-side navigation so the same world keeps running.
+---
+
+<canvas id="lab-canvas" transition:persist aria-hidden="true" class="lab-canvas"></canvas>
+
+<style>
+  .lab-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+    /* Recede under the content column so text keeps full contrast. */
+    mask-image: linear-gradient(to right, #000, rgb(0 0 0 / 0.35) 25%, rgb(0 0 0 / 0.35) 75%, #000);
+  }
+  :global([data-theme="light"]) .lab-canvas {
+    opacity: 0.65;
+  }
+  /* No side margins on narrow screens: the whole field sits behind text. */
+  @media (max-width: 48rem) {
+    .lab-canvas,
+    :global([data-theme="light"]) .lab-canvas {
+      opacity: 0.16;
+      mask-image: none;
+    }
+  }
+</style>
+
+<script>
+  import { start, onStatus, GLYPHS, type LabStatus } from "@/lib/lab";
+
+  const canvas = document.getElementById("lab-canvas") as HTMLCanvasElement | null;
+  if (canvas && !start(canvas)) canvas.remove();
+
+  const render = (s: LabStatus) => {
+    const row = document.querySelector<HTMLElement>("[data-lab-row]");
+    if (!row) return;
+    row.hidden = false;
+    row.querySelector("[data-lab-status]")!.textContent =
+      `generation ${s.generation.toLocaleString()} · ${s.species} species · lineage `;
+    row.querySelector("[data-lab-glyph]")!.textContent = GLYPHS[s.leader];
+    row.querySelector("[data-lab-lineage]")!.textContent = s.lineage;
+    row.querySelector("[data-lab-hub]")!.textContent = s.hub ?? "";
+  };
+  onStatus(render);
+  // The footer is swapped on navigation; repaint it from the latest status.
+  document.addEventListener("astro:page-load", () => onStatus((s) => render(s))());
+</script>
