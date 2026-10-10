@@ -31,10 +31,12 @@
 </style>
 
 <script>
-  import { start, onStatus, GLYPHS, type LabStatus } from "@/lib/lab";
+  import { start, onStatus, setHub, GLYPHS, type LabStatus } from "@/lib/lab";
+  import { startHubClient } from "@/lib/lab/hub-client";
 
   const canvas = document.getElementById("lab-canvas") as HTMLCanvasElement | null;
   if (canvas && !start(canvas)) canvas.remove();
+  else if (canvas) startHubClient(setHub);
 
   const render = (s: LabStatus) => {
     const row = document.querySelector<HTMLElement>("[data-lab-row]");
