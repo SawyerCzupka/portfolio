@@ -30,7 +30,7 @@ const dateStr = frontmatter.date.toISOString().slice(0, 10);
     </a>
 
     {/* Header */}
-    <header class="mb-8 relative">
+    <header data-island class="mb-8 relative">
       <div class="flex items-center gap-4 mb-6">
         <time
           datetime={dateStr}
@@ -62,7 +62,7 @@ const dateStr = frontmatter.date.toISOString().slice(0, 10);
     </header>
 
     {/* Content */}
-    <div class="prose">
+    <div data-island class="prose">
       <slot />
     </div>
   </article>

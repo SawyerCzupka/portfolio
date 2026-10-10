@@ -1,4 +1,4 @@
-import { VERT, STEP, STATS, PAINT, DRAW } from "./shaders";
+import { VERT, STEP, STATS, PAINT, DRAW, ISLANDS } from "./shaders";
 import { K, GENOME_LEN, population, observe, evolve } from "./evolve";
 
 const STAT_BLOCK = 8;
@@ -18,8 +18,6 @@ export class Sim {
   private targets: [Target, Target];
   private weights: WebGLTexture;
   private stats: { fb: WebGLFramebuffer; buf: Float32Array };
-  private mask: WebGLTexture;
-  private page = [1, 1];
   private growth = new Float32Array(K).fill(1);
   private upkeep = new Float32Array(K).fill(1);
 
@@ -46,12 +44,6 @@ export class Sim {
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, statTex, 0);
     this.stats = { fb, buf: new Float32Array((w * h) / STAT_BLOCK / STAT_BLOCK * 4) };
     gl.bindVertexArray(gl.createVertexArray());
-    this.mask = gl.createTexture()!;
-    gl.bindTexture(gl.TEXTURE_2D, this.mask);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     population.forEach((_, i) => this.upload(i));
     for (let i = 0; i < K; i++) {
       const a = (i / K) * Math.PI * 2 + Math.random();
@@ -174,14 +166,6 @@ export class Sim {
     });
   }
 
-  /** Text knockout mask covering the whole page (`pageW`×`pageH` CSS px). */
-  setMask(source: HTMLCanvasElement, pageW: number, pageH: number) {
-    const gl = this.gl;
-    gl.bindTexture(gl.TEXTURE_2D, this.mask);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
-    this.page = [pageW, pageH];
-  }
-
   /** Grid cell under a viewport point (CSS px), accounting for page scroll. */
   cellAt(clientX: number, clientY: number, scroll: number, dpr: number) {
     const cell = this.gl.drawingBufferWidth / this.w;
@@ -203,24 +187,20 @@ export class Sim {
   /**
    * Draw to the canvas, scrolled with the page.
    * - `colors`: K rgb triples in 0..1
-   * - `rects`: up to 4 viewport-space knockout boxes (x, y, w, h in CSS px)
+   * - `islands`: up to ISLANDS page-space knockout boxes (x, y, w, h in CSS px), flattened
    */
-  draw(colors: number[], scroll: number, dpr: number, rects: number[] = []) {
+  draw(colors: number[], scroll: number, dpr: number, islands: number[] = []) {
     const gl = this.gl;
     const [cw, ch] = [gl.drawingBufferWidth, gl.drawingBufferHeight];
     this.pass(
       this.progs.draw,
       (u) => {
-        gl.activeTexture(gl.TEXTURE3);
-        gl.bindTexture(gl.TEXTURE_2D, this.mask);
-        gl.uniform1i(u("u_mask"), 3);
         gl.uniform3fv(u("u_colors"), colors);
         gl.uniform1f(u("u_cell"), cw / this.w);
         gl.uniform1f(u("u_height"), ch);
         gl.uniform1f(u("u_dpr"), dpr);
         gl.uniform1f(u("u_scroll"), scroll);
-        gl.uniform2fv(u("u_page"), this.page);
-        gl.uniform4fv(u("u_rects"), [...rects, ...Array(16).fill(-1e4)].slice(0, 16));
+        gl.uniform4fv(u("u_islands"), [...islands, ...Array(ISLANDS * 4).fill(0)].slice(0, ISLANDS * 4));
       },
       null,
       [cw, ch],

@@ -13,7 +13,7 @@ navigation).
 | `evolve.ts` | Genomes, population, selection. No GL. The hub seam lives here. |
 | `sim.ts` | WebGL2 state: ping-pong float targets, weight texture, stats readback, draw. |
 | `shaders.ts` | `STEP` (NCA + physics), `STATS` (territory counts), `PAINT` (seed/erase), `DRAW` (halftone glyphs). |
-| `textmask.ts` | Page-space mask of text/figure boxes; "is this point over content" test for pointer input. |
+| `islands.ts` | Measures `data-island` content blocks into knockout boxes; "does this press belong to the page" test for pointer input. |
 | `index.ts` | Public API and runtime: RAF loop, scroll, theme ink, pointer, inspection, status. |
 
 ## Model
@@ -61,18 +61,22 @@ in a random disc. Fitness = mean territory share over the epoch.
   changes (oklch resolved via a 2D canvas).
 - **Scrolls with the page**: the torus is drawn offset by `scrollY`. The world
   is about two viewports tall, so the wrap isn't obvious.
-- **Text knockout**: `textmask.ts` paints text line boxes (plus `main svg/img/pre`)
-  into a blurred, quarter-scale page-space mask, and `DRAW` fades glyphs to about
-  8% there. Text in sticky/fixed containers moves with the viewport, so those
-  containers are passed per frame as up to 4 viewport-space boxes instead. The
-  mask is rebuilt on navigation (`refresh()`), resize, `document.fonts.ready`
-  and body resize.
+- **Islands**: content blocks are marked `data-island` and get a 1px hairline
+  `outline` (`global.css`). `data-island="bare"` is for blocks that already draw
+  their own frame or rules (bracket cards, section headings, the footer title
+  block): those are knocked out without an outline. `DRAW` skips any cell whose
+  centre falls inside an island box (the element grown by its `outline-offset`
+  plus a 10px gap), so edges follow the cell grid and no glyph touches a border.
+  Islands in sticky/fixed containers are re-measured every frame. Each frame
+  passes the islands near the viewport, up to `ISLANDS` (32). Boxes are re-measured
+  on navigation (`refresh()`), resize, `document.fonts.ready` and body resize.
+- **Overscroll**: the canvas and the margin rails are sticky/absolute rather than
+  fixed, so they ride the rubber-band bounce with the page.
 
 ## Interaction
 
 The canvas is `pointer-events: none`. Window-level handlers act only when the
-press lands on empty background (`overContent()`: not on links or controls, and
-not over a text glyph via `caretPositionFromPoint`).
+press lands outside islands, links, controls and the header (`overContent()`).
 
 - Mouse/pen drag erases. Touch drags are left to page scrolling.
 - Click/tap on a live cell inspects. The reticle and specimen card are anchored
@@ -117,5 +121,5 @@ Changing the net shape changes `GENOME_LEN` and the texel offsets hard-coded in
     server between tuning edits, or HMR reloads reset the run.
   - Scroll lock-step check: under reduced motion, screenshot, scroll 200 px,
     screenshot. A 200 px-shifted crop of the margin should diff to 0.
-- Untested: real phones, Firefox (`caretPositionFromPoint` path), integrated-GPU
-  laptops.
+- Untested: real phones, Firefox, integrated-GPU laptops, and the overscroll
+  bounce (headless Chrome doesn't rubber-band).

@@ -22,9 +22,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 
     {/* Post list */}
     {posts.length === 0 ? (
-      <p class="font-mono text-sm text-muted">// no posts yet</p>
+      <p data-island class="font-mono text-sm text-muted">// no posts yet</p>
     ) : (
-      <ul class="space-y-0" role="list">
+      <ul data-island="bare" class="space-y-0" role="list">
         {posts.map((post) => {
           const slug = post.id.replace(/\.(md|mdx)$/, '');
           const dateStr = post.data.date.toISOString().slice(0, 10);

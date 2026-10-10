@@ -94,7 +94,7 @@ const sections = [
     </PageHeader>
 
     <div class="grid gap-12 lg:grid-cols-[11rem_1fr] pt-12">
-      <aside class="lg:sticky lg:top-28 self-start font-mono text-xs">
+      <aside data-island class="lg:sticky lg:top-28 self-start font-mono text-xs">
         <nav class="hidden lg:block mb-10" aria-label="Resume sections">
           <ol class="space-y-2.5" role="list">
             {
@@ -128,7 +128,7 @@ const sections = [
       </aside>
 
       <div class="min-w-0 space-y-24">
-        <section id="experience" class="scroll-mt-24">
+        <section id="experience" data-island class="scroll-mt-24">
           <SectionHeading index="01" title="Experience" />
           <ol class="relative border-l border-border-strong ml-1" role="list">
             {
@@ -169,7 +169,7 @@ const sections = [
           </ol>
         </section>
 
-        <section id="projects" class="scroll-mt-24">
+        <section id="projects" data-island class="scroll-mt-24">
           <SectionHeading index="02" title="Projects" />
           <div class="space-y-10">
             {
@@ -205,7 +205,7 @@ const sections = [
           </p>
         </section>
 
-        <section id="skills" class="scroll-mt-24">
+        <section id="skills" data-island class="scroll-mt-24">
           <SectionHeading index="03" title="Skills" />
           <dl class="divide-y divide-border border-y border-border">
             {
@@ -219,7 +219,7 @@ const sections = [
           </dl>
         </section>
 
-        <section id="education" class="scroll-mt-24">
+        <section id="education" data-island class="scroll-mt-24">
           <SectionHeading index="04" title="Education" />
           <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
             <div>

@@ -4,7 +4,9 @@
 // keeps running. Drag on empty background erases; click inspects.
 ---
 
-<canvas id="lab-canvas" transition:persist aria-hidden="true" class="lab-canvas"></canvas>
+<div id="lab-layer" transition:persist class="lab-layer">
+  <canvas id="lab-canvas" aria-hidden="true" class="lab-canvas"></canvas>
+</div>
 
 <div id="lab-ui" transition:persist data-lab-ui class="fixed inset-0 z-40 pointer-events-none" hidden>
   <svg
@@ -30,10 +32,20 @@
 </div>
 
 <style>
-  .lab-canvas {
-    position: fixed;
+  /* A page-tall layer holding a sticky canvas, rather than a fixed canvas, so the
+     canvas meets the layer's edge at either scroll extreme and rides the overscroll
+     bounce with the page. */
+  .lab-layer {
+    position: absolute;
     inset: 0;
-    width: 100vw;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .lab-canvas {
+    position: sticky;
+    top: 0;
+    display: block;
+    width: 100%;
     height: 100vh;
     pointer-events: none;
     z-index: 0;
@@ -109,7 +121,7 @@
     row.querySelector("[data-lab-hub]")!.textContent = s.hub ?? "";
   };
   onStatus(render);
-  // Footer and page text are swapped on navigation: repaint status and rebuild the text mask.
+  // Footer and page text are swapped on navigation: repaint status and re-measure islands.
   document.addEventListener("astro:page-load", () => {
     onStatus((s) => render(s))();
     if (canvas?.isConnected) refresh();

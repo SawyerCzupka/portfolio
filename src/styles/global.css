@@ -85,7 +85,7 @@
   .sheet::before,
   .sheet::after {
     content: "";
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
     width: 1px;
@@ -98,6 +98,12 @@
   }
   .sheet::after {
     right: max(0.75rem, calc(50% - 32rem - 1.5rem));
+  }
+
+  /* Content islands: the lab field is not drawn inside or near them. "bare" islands draw their own frame. */
+  [data-island]:not([data-island="bare"]) {
+    outline: 1px solid var(--color-border);
+    outline-offset: 12px;
   }
 
   /* Registration marks: four corner brackets drawn with gradients. */

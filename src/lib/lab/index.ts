@@ -1,6 +1,7 @@
 import { Sim } from "./sim";
 import { population, epoch, GENOME_LEN, type Species } from "./evolve";
-import { buildTextMask, overContent } from "./textmask";
+import { collectIslands, frameBoxes, overContent, type Islands } from "./islands";
+import { ISLANDS } from "./shaders";
 
 export { GENOME_LEN, bestGenomes, injectMigrant, type Genome } from "./evolve";
 
@@ -30,7 +31,7 @@ let hub: string | null = null;
 let last: LabStatus | null = null;
 let ink = { accent: [0, 0, 0], muted: [0, 0, 0] };
 let inspected: { x: number; pageY: number; id: string } | null = null;
-let floating: Element[] = [];
+let islands: Islands = { page: [], floating: [] };
 const listeners = new Set<(s: LabStatus) => void>();
 const inspectors = new Set<(i: Inspection | null) => void>();
 const coarse = () => matchMedia("(pointer: coarse)").matches;
@@ -90,11 +91,8 @@ function readInk() {
 function draw() {
   if (!sim) return;
   const lead = leader();
-  const rects = floating.slice(0, 4).flatMap((el) => {
-    const r = el.getBoundingClientRect();
-    return [r.x, r.y, r.width, r.height];
-  });
-  sim.draw(population.flatMap((_, i) => (i === lead ? ink.accent : ink.muted)), scrollY, dpr(), rects);
+  const colors = population.flatMap((_, i) => (i === lead ? ink.accent : ink.muted));
+  sim.draw(colors, scrollY, dpr(), frameBoxes(islands, scrollY, ISLANDS));
   if (!inspected) return inspectors.forEach((cb) => cb(null));
   const slot = population.findIndex((s) => s.genome.id === inspected!.id);
   const info = {
@@ -111,31 +109,29 @@ function draw() {
 const redraw = () => running() || draw();
 
 function fit() {
-  canvas.width = Math.round(innerWidth * dpr());
+  canvas.width = Math.round(document.documentElement.clientWidth * dpr());
   canvas.height = Math.round(innerHeight * dpr());
-  remask();
+  measure();
 }
 
-let maskTimer = 0;
+let measureTimer = 0;
 const bodyObserver = new ResizeObserver(() => {
-  clearTimeout(maskTimer);
-  maskTimer = window.setTimeout(remask, 150);
+  clearTimeout(measureTimer);
+  measureTimer = window.setTimeout(measure, 150);
 });
 
-function remask() {
+function measure() {
   if (!sim) return;
-  const m = buildTextMask();
-  sim.setMask(m.canvas, m.w, m.h);
-  floating = m.floating;
+  islands = collectIslands();
   redraw();
 }
 
-/** Rebuild the text mask after the page content changes (e.g. a client-side navigation). */
+/** Re-measure islands after the page content changes (e.g. a client-side navigation). */
 export function refresh() {
   inspected = null;
   bodyObserver.disconnect();
   bodyObserver.observe(document.body);
-  remask();
+  measure();
 }
 
 function tick() {
@@ -157,7 +153,7 @@ function resume() {
 let drag: { x: number; y: number; moved: boolean } | null = null;
 
 function onDown(e: PointerEvent) {
-  if (!e.isPrimary || e.button !== 0 || overContent(e.clientX, e.clientY, e.target as Element)) return;
+  if (!e.isPrimary || e.button !== 0 || overContent(e.target as Element)) return;
   drag = { x: e.clientX, y: e.clientY, moved: false };
   // Keeps a drag across empty background from turning into a text selection.
   if (e.pointerType === "mouse") e.preventDefault();
@@ -200,7 +196,7 @@ export function start(el: HTMLCanvasElement): boolean {
   const grid = (px: number, hi: number) => Math.min(hi, Math.max(32, Math.round(px / cell / 8) * 8));
   try {
     // About two viewports tall, so the scrolling torus doesn't visibly repeat.
-    sim = new Sim(canvas, grid(innerWidth, 160), grid(innerHeight * 2, 192));
+    sim = new Sim(canvas, grid(document.documentElement.clientWidth, 160), grid(innerHeight * 2, 192));
   } catch {
     return false;
   }
@@ -215,7 +211,7 @@ export function start(el: HTMLCanvasElement): boolean {
   addEventListener("pointerup", onUp);
   addEventListener("keydown", onKey);
   document.addEventListener("visibilitychange", resume);
-  document.fonts.ready.then(remask);
+  document.fonts.ready.then(measure);
   themeObserver.observe(document.documentElement, { attributeFilter: ["data-theme"] });
   resume();
   draw();
