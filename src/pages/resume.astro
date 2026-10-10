@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import { getCollection } from "astro:content";
+import { getProjects } from "@/lib/projects";
 
 // Fine dot grid — 34 cols × 8 rows at 28px, full-width backdrop
 const COLS = 34;
@@ -39,6 +40,7 @@ const skills = {
     "DeepEval",
     "vLLM",
     "Azure OpenAI",
+    "Langfuse",
     "Git",
   ],
   "DevOps & Infrastructure": [
@@ -54,6 +56,8 @@ const skills = {
     "Traefik",
     "MLflow",
     "Azure",
+    "Azure Monitor / KQL",
+    "OpenTelemetry",
     "AWS",
     "AWS Lambda",
     "Linux",
@@ -62,71 +66,23 @@ const skills = {
   ],
 };
 
-const experience = [
-  {
-    title: "Software Engineering Intern (Sole Engineer)",
-    org: "Luminexis AI / Threat Tec",
-    period: "Aug 2025 – Dec 2025",
-    bullets: [
-      "Built full-stack React/FastAPI application with JWT authentication, role-based access control, admin dashboards, and ROI tracking tools for identifying AI automation opportunities.",
-      "Engineered LLM-powered document analysis pipeline using Azure OpenAI and Document Intelligence to extract requirements, risk factors, and action items from 140+ contract PDFs — reducing manual review time from hours to minutes per document.",
-      "Deployed production RAG chatbot with Qdrant vector database and LlamaIndex achieving 70–80% on RAGAS evaluation metrics for domain-specific Q&A across configurable knowledge bases.",
-      "Provisioned 4-environment Azure infrastructure (Dev, Staging, Demo, Production) using Terraform with shared modules, managing Container Apps, PostgreSQL, Key Vault, AI Foundry, and private networking; implemented CI/CD with GitHub Actions.",
-    ],
-  },
-  {
-    title: "Machine Learning & Software Engineer",
-    org: "Teamculture.ai / L10.tech",
-    period: "Jan 2024 – Sept 2024",
-    bullets: [
-      "Developed serverless RAG evaluation system using AWS Lambda, API Gateway, and DeepEval to automate performance monitoring — reducing evaluation runtime from manual testing to an automated pipeline.",
-      "Built Vue/FastAPI interface for creating evaluations and curating golden example datasets, enabling systematic quality measurement and iterative improvement of AI services at scale.",
-    ],
-  },
-  {
-    title: "Machine Learning Technical Lead",
-    org: "GeoLab @ William & Mary",
-    period: "Jan 2023 – May 2025",
-    bullets: [
-      "Led cross-functional ML integration across frontend, backend, and ML subteams for the SCOPE research platform, establishing technical requirements and coordinating implementation of RAG capabilities.",
-      "Architected microservice-based RAG system on Kubernetes using Qdrant, vLLM, LlamaIndex, and FastAPI; built custom document processing pipeline with Vision-Language Models (Qwen-2.5-VL) for extracting text and structure from complex PDF/DOCX documents — reducing parsing errors by over 50%.",
-    ],
-  },
-  {
-    title: "Machine Learning & Software Engineer Intern",
-    org: "The World Bank & GEF",
-    period: "May 2023 – Sept 2023",
-    bullets: [
-      "Built RAG-based system automating analysis of 24,000+ GEF project documents for large-scale socioeconomic impact evaluation — enabling data-driven funding allocation and strategic planning decisions for the first time.",
-    ],
-  },
-];
+const experience = (await getCollection("experience"))
+  .map((e) => e.data)
+  .sort((a, b) => b.start.valueOf() - a.start.valueOf());
 
 const academicEntries = await getCollection("projects", (e) => e.data.academic === true);
 const academicProjects = academicEntries
   .map((e) => ({ id: e.id, ...e.data }))
   .sort((a, b) => a.name.localeCompare(b.name));
 
-const projects = [
-  {
-    name: "LapEvo: iRacing Telemetry Tracker & Real-time Coach",
-    url: "https://lapevo.com",
-    period: "Jan 2025 – Present",
-    bullets: [
-      "Architected real-time telemetry pipeline ingesting iRacing simulator data at 60Hz using Python/FastAPI microservices with TimescaleDB hypertables and event-driven async processing.",
-      "Built full-stack monorepo with React 19/TypeScript dashboard, auto-generated OpenAPI client via Orval, and Docker Compose orchestration; implemented pytest + testcontainers for isolated integration testing enabling CI/CD without live game dependencies.",
-    ],
-  },
-  {
-    name: "Personal Homelab Infrastructure",
-    url: null,
-    period: "Jul 2023 – Present",
-    bullets: [
-      "Maintain production-grade homelab with 6 VMs and 116-pod Kubernetes cluster on Proxmox, hosting Vaultwarden, Technitium DNS, Jellyfin, and Gitea with Traefik reverse proxy and automated Let's Encrypt TLS.",
-      "Leverage infrastructure-as-code with Packer, Terraform, Kubernetes manifests, and ArgoCD for GitOps-based continuous deployment — enabling rapid experimentation while maintaining reproducible environments.",
-    ],
-  },
-];
+const projects = (
+  await getProjects((e) => e.data.resumeBullets.length > 0)
+).map((e) => ({
+  name: e.data.name,
+  url: e.data.url,
+  period: e.data.period,
+  bullets: e.data.resumeBullets,
+}));
 ---
 
 <Base

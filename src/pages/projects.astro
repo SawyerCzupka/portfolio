@@ -2,9 +2,9 @@
 import Base from "../layouts/Base.astro";
 import GeoAccent from "../components/GeoAccent.astro";
 import Rectengles from "@/components/Rectengles.astro";
-import { getCollection } from "astro:content";
+import { getProjects } from "@/lib/projects";
 
-const projectEntries = await getCollection("projects");
+const projectEntries = await getProjects();
 const projects = projectEntries.map((e) => ({ id: e.id, ...e.data }));
 ---
 

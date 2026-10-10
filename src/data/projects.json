@@ -3,7 +3,7 @@
     "id": "lapevo",
     "name": "LapEvo",
     "subtitle": "iRacing Telemetry Tracker & Real-time Coach",
-    "period": "Jan 2025 - Present",
+    "period": "Jan 2025 – Present",
     "url": "https://lapevo.com",
     "featured": true,
     "teaser": "iRacing telemetry tracker and AI racing coach — real-time 60Hz data pipeline, React dashboard, and TimescaleDB time-series storage.",
@@ -15,13 +15,26 @@
       "pytest + testcontainers for fully isolated integration testing — CI/CD runs without a live game instance",
       "Docker Compose orchestration for local development parity with production"
     ],
-    "stack": ["Python", "FastAPI", "React 19", "TypeScript", "TimescaleDB", "Docker", "pytest", "Orval"]
+    "stack": [
+      "Python",
+      "FastAPI",
+      "React 19",
+      "TypeScript",
+      "TimescaleDB",
+      "Docker",
+      "pytest",
+      "Orval"
+    ],
+    "resumeBullets": [
+      "Architected real-time telemetry pipeline ingesting iRacing simulator data at 60Hz using Python/FastAPI microservices with TimescaleDB hypertables and event-driven async processing.",
+      "Built full-stack monorepo with React 19/TypeScript dashboard, auto-generated OpenAPI client via Orval, and Docker Compose orchestration; implemented pytest + testcontainers for isolated integration testing enabling CI/CD without live game dependencies."
+    ]
   },
   {
     "id": "homelab",
     "name": "Personal Homelab Infrastructure",
     "subtitle": "Production-grade self-hosted infrastructure",
-    "period": "Jul 2023 - Present",
+    "period": "Jul 2023 – Present",
     "url": null,
     "featured": true,
     "teaser": "Production-grade homelab: 116-pod Kubernetes cluster on Proxmox, GitOps via ArgoCD, Terraform/Packer infra-as-code, and automated TLS.",
@@ -33,7 +46,21 @@
       "Traefik reverse proxy with automated Let's Encrypt TLS — zero manual certificate management",
       "Prometheus + Grafana observability stack for cluster and service metrics"
     ],
-    "stack": ["Kubernetes", "Proxmox", "Terraform", "Packer", "ArgoCD", "Traefik", "Prometheus", "Grafana", "Linux"]
+    "stack": [
+      "Kubernetes",
+      "Proxmox",
+      "Terraform",
+      "Packer",
+      "ArgoCD",
+      "Traefik",
+      "Prometheus",
+      "Grafana",
+      "Linux"
+    ],
+    "resumeBullets": [
+      "Maintain production-grade homelab with 6 VMs and 116-pod Kubernetes cluster on Proxmox, hosting Vaultwarden, Technitium DNS, Jellyfin, and Gitea with Traefik reverse proxy and automated Let's Encrypt TLS.",
+      "Leverage infrastructure-as-code with Packer, Terraform, Kubernetes manifests, and ArgoCD for GitOps-based continuous deployment — enabling rapid experimentation while maintaining reproducible environments."
+    ]
   },
   {
     "id": "gnn-molecular-properties",
@@ -50,7 +77,11 @@
       "Molecular graph representation with atom/bond features as node and edge attributes",
       "Graph-level regression using message-passing neural network architecture"
     ],
-    "stack": ["PyTorch Geometric", "PyTorch", "Python"]
+    "stack": [
+      "PyTorch Geometric",
+      "PyTorch",
+      "Python"
+    ]
   },
   {
     "id": "transformer-sentiment-analysis",
@@ -66,7 +97,11 @@
       "Transfer learning via fine-tuning a pre-trained transformer on labeled sentiment data",
       "Explored attention weight visualization to interpret model decisions"
     ],
-    "stack": ["PyTorch", "Hugging Face Transformers", "Python"]
+    "stack": [
+      "PyTorch",
+      "Hugging Face Transformers",
+      "Python"
+    ]
   },
   {
     "id": "cnn-image-classification",
@@ -82,7 +117,10 @@
       "Classification and regression heads on shared convolutional backbone",
       "Data augmentation pipeline for improved generalization"
     ],
-    "stack": ["PyTorch", "Python"]
+    "stack": [
+      "PyTorch",
+      "Python"
+    ]
   },
   {
     "id": "network-traffic-classifier",
@@ -98,7 +136,11 @@
       "Feature extraction from raw packet trace data (timing, size, protocol)",
       "Comparative evaluation of ML classifiers on traffic categorization"
     ],
-    "stack": ["Python", "Scikit-Learn", "Pandas"]
+    "stack": [
+      "Python",
+      "Scikit-Learn",
+      "Pandas"
+    ]
   },
   {
     "id": "time-series-forecasting",
@@ -114,7 +156,11 @@
       "Multi-step ahead forecasting with recurrent and transformer-based architectures",
       "Time series preprocessing: differencing, normalization, sliding window batching"
     ],
-    "stack": ["PyTorch", "Python", "Pandas"]
+    "stack": [
+      "PyTorch",
+      "Python",
+      "Pandas"
+    ]
   },
   {
     "id": "diffusion-model-generation",
@@ -131,6 +177,9 @@
       "UNet denoising network for the reverse process",
       "DDPM sampling for image generation"
     ],
-    "stack": ["PyTorch", "Python"]
+    "stack": [
+      "PyTorch",
+      "Python"
+    ]
   }
 ]

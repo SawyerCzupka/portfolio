@@ -1,9 +1,13 @@
 ---
+import { getCollection } from "astro:content";
+
+const hasPosts = (await getCollection("blog", ({ data }) => !data.draft)).length > 0;
+
 const navLinks = [
   { href: "/", label: "home" },
   { href: "/projects", label: "projects" },
   { href: "/resume", label: "resume" },
-  { href: "/writing", label: "writing" },
+  ...(hasPosts ? [{ href: "/writing", label: "writing" }] : []),
 ];
 
 const currentPath = Astro.url.pathname;

@@ -25,7 +25,21 @@ const projects = defineCollection({
     highlights: z.array(z.string()),
     stack: z.array(z.string()),
     academic: z.boolean().default(false),
+    resumeBullets: z.array(z.string()).default([]),
   }),
 });
 
-export const collections = { blog, projects };
+const experience = defineCollection({
+  loader: file('src/data/experience.json'),
+  schema: z.object({
+    title: z.string(),
+    org: z.string(),
+    url: z.string().url().nullable(),
+    period: z.string(),
+    start: z.coerce.date(),
+    current: z.boolean().default(false),
+    bullets: z.array(z.string()),
+  }),
+});
+
+export const collections = { blog, projects, experience };

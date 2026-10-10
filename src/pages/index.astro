@@ -1,17 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
 import HeroBackground from "../components/HeroBackground.astro";
-import { getCollection } from "astro:content";
-import PostList from "@/components/PostList.astro";
+import { getProjects } from "@/lib/projects";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
-
-const featuredProjects = await getCollection(
-  "projects",
-  ({ data }) => data.featured,
-);
+const featuredProjects = await getProjects(({ data }) => data.featured);
 ---
 
 <Base title="Sawyer Czupka">
@@ -45,23 +37,13 @@ const featuredProjects = await getCollection(
       </p>
 
       <p class="text-base text-muted leading-relaxed mb-10">
-        I build production software across backend engineering, ML systems, and
-        cloud infrastructure. I'm a backend-first full-stack engineer — API
-        design, data pipelines, and system architecture are where I'm most at
-        home, though I'm fully capable on the frontend too.
-        <br /><br />
-        My ML work spans both applied systems and model development. On the applied
-        side I've built RAG pipelines, LLM evaluation frameworks, and production model-serving
-        infrastructure. On the research side I've trained models from scratch — dense
-        neural networks, graph neural networks, transformers, reinforcement learning
-        agents, and computer vision classifiers — through my work at William & Mary.
-        <br /><br />
-        I'm also comfortable managing the full infrastructure stack: Kubernetes clusters,
-        CI/CD automation, cloud deployments on Azure and Cloudflare, Terraform-provisioned
-        environments, and self-hosted homelab services.
-        <br /><br />
-        Recently finished my BS in Computer Science & Data Science at William & Mary,
-        Cum Laude.
+        I'm a software engineer at
+        <a href="https://aurelian.com" target="_blank" rel="noopener noreferrer" class="text-text hover:text-accent transition-colors duration-150">Aurelian</a>,
+        where I connect AI call-handling to the dispatch systems 911 centers
+        run on. I'm backend-first: APIs, data pipelines, and the
+        infrastructure underneath them. Before that I built RAG systems and
+        LLM evaluation tooling, trained models at William &amp; Mary, and I
+        still run a Kubernetes homelab for fun.
       </p>
 
       <div class="flex flex-wrap gap-4">
@@ -80,28 +62,6 @@ const featuredProjects = await getCollection(
       </div>
     </div>
   </section>
-
-  {/* ── Divider ──────────────────────────────────────────── */}
-  <!-- <div class="max-w-5xl mx-auto px-6">
-    <div class="border-t border-border"></div>
-  </div>
-
-  {/* ── Recent Writing ───────────────────────────────────── */}
-  <section class="max-w-5xl mx-auto px-6 py-12">
-    <div class="flex items-center justify-between mb-10">
-      <h2 class="font-mono text-xs text-muted tracking-widest uppercase">
-        // recent writing
-      </h2>
-      <a
-        href="/writing"
-        class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
-      >
-        all posts →
-      </a>
-    </div>
-
-    <PostList />
-  </section> -->
 
   {/* ── Divider ──────────────────────────────────────────── */}
   <div class="max-w-5xl mx-auto px-6">
