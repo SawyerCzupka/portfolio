@@ -7,10 +7,11 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.google(),
-      name: 'Instrument Serif',
-      cssVariable: '--font-instrument-serif',
-      weights: [400],
+      name: 'EB Garamond',
+      cssVariable: '--font-eb-garamond',
+      weights: [400, 500],
       styles: ['normal', 'italic'],
+      fallbacks: ['Georgia', 'serif'],
     },
     {
       provider: fontProviders.google(),

@@ -24,7 +24,7 @@
 
   --font-sans: var(--font-geist), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --font-serif: var(--font-eb-garamond), Georgia, serif;
 
   --radius-DEFAULT: 0px;
 }
