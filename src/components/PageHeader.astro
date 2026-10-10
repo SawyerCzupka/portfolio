@@ -1,0 +1,24 @@
+---
+interface Props {
+  sheet: string;
+  title: string;
+  lead?: string;
+}
+
+const { sheet, title, lead } = Astro.props;
+---
+
+<header class="pt-20 pb-16 mb-4 border-b border-border">
+  <p class="font-mono text-[11px] tracking-wide text-faint mb-6">
+    <span class="text-accent">sheet {sheet}</span>
+  </p>
+  <div class="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <h1 class="font-serif text-6xl sm:text-7xl leading-[0.9] text-text">
+        {title}
+      </h1>
+      {lead && <p class="mt-6 max-w-lg text-muted leading-relaxed">{lead}</p>}
+    </div>
+    <slot />
+  </div>
+</header>

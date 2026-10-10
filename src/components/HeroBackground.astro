@@ -1,93 +1,94 @@
 ---
-// Large technical geometric composition for the hero section.
-// Dot grid + bounding rectangle + corner marks + center crosshair.
+// Technical-drawing figure for the hero: dot grid, framed sheet with
+// dimension lines, and a slowly rotating reticle at the center.
 interface Props {
   class?: string;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = "" } = Astro.props;
 
-const COLS = 18;
-const ROWS = 13;
-const GAP = 24;
-const OFFSET_X = 14;
-const OFFSET_Y = 14;
-const W = 460;
-const H = 336;
+const W = 400;
+const H = 400;
+const PAD = 40;
+const GAP = 20;
 
-const dots = Array.from({ length: COLS * ROWS }, (_, i) => ({
-  cx: OFFSET_X + (i % COLS) * GAP,
-  cy: OFFSET_Y + Math.floor(i / COLS) * GAP,
-}));
+const dots = [];
+for (let x = PAD; x <= W - PAD; x += GAP) {
+  for (let y = PAD; y <= H - PAD; y += GAP) dots.push({ x, y });
+}
 
-const TICK = 22;
-const MID_X = W / 2;
-const MID_Y = H / 2;
+const CX = W / 2;
+const CY = H / 2;
+const TICK = 14;
+const corners = [
+  [PAD, PAD, 1, 1],
+  [W - PAD, PAD, -1, 1],
+  [PAD, H - PAD, 1, -1],
+  [W - PAD, H - PAD, -1, -1],
+] as const;
 ---
 
 <svg
   class={className}
   width={W}
-  height={H}
-  viewBox={`0 0 ${W} ${H}`}
+  height={H + 28}
+  viewBox={`0 0 ${W} ${H + 28}`}
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   aria-hidden="true"
 >
-  {/* ── Dot grid ─────────────────────────────── */}
-  {dots.map((d) => (
-    <circle cx={d.cx} cy={d.cy} r="1.6" fill="currentColor" />
-  ))}
+  <g class="text-faint" opacity="0.55">
+    {dots.map((d) => <circle cx={d.x} cy={d.y} r="1" fill="currentColor" />)}
+  </g>
 
-  {/* ── Outer bounding rectangle ─────────────── */}
-  <rect x="0" y="0" width={W} height={H} stroke="currentColor" stroke-width="0.75" />
+  <g class="text-border-strong" stroke="currentColor">
+    <rect x={PAD} y={PAD} width={W - PAD * 2} height={H - PAD * 2} stroke-width="1" />
+    <line x1={PAD} y1={CY} x2={W - PAD} y2={CY} stroke-width="0.5" stroke-dasharray="2 4" />
+    <line x1={CX} y1={PAD} x2={CX} y2={H - PAD} stroke-width="0.5" stroke-dasharray="2 4" />
+  </g>
 
-  {/* ── Corner marks (bracket ticks at all four corners) ── */}
-  {/* Top-left */}
-  <line x1="0" y1="0" x2={TICK} y2="0" stroke="currentColor" stroke-width="1.25" />
-  <line x1="0" y1="0" x2="0" y2={TICK} stroke="currentColor" stroke-width="1.25" />
-  {/* Top-right */}
-  <line x1={W} y1="0" x2={W - TICK} y2="0" stroke="currentColor" stroke-width="1.25" />
-  <line x1={W} y1="0" x2={W} y2={TICK} stroke="currentColor" stroke-width="1.25" />
-  {/* Bottom-left */}
-  <line x1="0" y1={H} x2={TICK} y2={H} stroke="currentColor" stroke-width="1.25" />
-  <line x1="0" y1={H} x2="0" y2={H - TICK} stroke="currentColor" stroke-width="1.25" />
-  {/* Bottom-right */}
-  <line x1={W} y1={H} x2={W - TICK} y2={H} stroke="currentColor" stroke-width="1.25" />
-  <line x1={W} y1={H} x2={W} y2={H - TICK} stroke="currentColor" stroke-width="1.25" />
+  <g class="text-muted" stroke="currentColor" stroke-width="1.25">
+    {
+      corners.map(([x, y, dx, dy]) => (
+        <path d={`M${x} ${y + dy * TICK}V${y}H${x + dx * TICK}`} />
+      ))
+    }
+  </g>
 
-  {/* ── Inner offset rectangle ────────────────── */}
-  <rect
-    x="28"
-    y="28"
-    width={W - 56}
-    height={H - 56}
-    stroke="currentColor"
-    stroke-width="0.4"
-    opacity="0.45"
-  />
+  {/* Dimension lines */}
+  <g class="text-faint" stroke="currentColor" stroke-width="0.75">
+    <line x1={PAD} y1={H - 14} x2={W - PAD} y2={H - 14} />
+    <line x1={PAD} y1={H - 20} x2={PAD} y2={H - 8} />
+    <line x1={W - PAD} y1={H - 20} x2={W - PAD} y2={H - 8} />
+    <line x1={W - 14} y1={PAD} x2={W - 14} y2={H - PAD} />
+    <line x1={W - 20} y1={PAD} x2={W - 8} y2={PAD} />
+    <line x1={W - 20} y1={H - PAD} x2={W - 8} y2={H - PAD} />
+  </g>
+  <g class="text-faint font-mono" fill="currentColor" font-size="9" letter-spacing="0.5">
+    <rect x={CX - 26} y={H - 20} width="52" height="12" class="fill-bg" />
+    <text x={CX} y={H - 11} text-anchor="middle">320.00</text>
+    <text x="0" y={H + 22}>FIG. 01</text>
+    <text x={W} y={H + 22} text-anchor="end">SCALE 1:1</text>
+  </g>
 
-  {/* ── Center crosshair ─────────────────────── */}
-  <line
-    x1="0" y1={MID_Y} x2={W} y2={MID_Y}
-    stroke="currentColor" stroke-width="0.5" opacity="0.4"
-  />
-  <line
-    x1={MID_X} y1="0" x2={MID_X} y2={H}
-    stroke="currentColor" stroke-width="0.5" opacity="0.4"
-  />
-  {/* Center circle */}
-  <circle cx={MID_X} cy={MID_Y} r="5" stroke="currentColor" stroke-width="0.6" opacity="0.6" />
-  <circle cx={MID_X} cy={MID_Y} r="1.5" fill="currentColor" opacity="0.6" />
-
-  {/* ── Edge midpoint tick marks ──────────────── */}
-  <line x1={MID_X - 6} y1="0" x2={MID_X + 6} y2="0" stroke="currentColor" stroke-width="1" />
-  <line x1={MID_X - 6} y1={H} x2={MID_X + 6} y2={H} stroke="currentColor" stroke-width="1" />
-  <line x1="0" y1={MID_Y - 6} x2="0" y2={MID_Y + 6} stroke="currentColor" stroke-width="1" />
-  <line x1={W} y1={MID_Y - 6} x2={W} y2={MID_Y + 6} stroke="currentColor" stroke-width="1" />
-
-  {/* ── Quarter tick marks ────────────────────── */}
-  <line x1={W / 4} y1="0" x2={W / 4} y2="8" stroke="currentColor" stroke-width="0.6" opacity="0.5" />
-  <line x1={W * 3 / 4} y1="0" x2={W * 3 / 4} y2="8" stroke="currentColor" stroke-width="0.6" opacity="0.5" />
-  <line x1={W / 4} y1={H} x2={W / 4} y2={H - 8} stroke="currentColor" stroke-width="0.6" opacity="0.5" />
-  <line x1={W * 3 / 4} y1={H} x2={W * 3 / 4} y2={H - 8} stroke="currentColor" stroke-width="0.6" opacity="0.5" />
+  {/* Reticle */}
+  <g class="text-accent" stroke="currentColor">
+    <circle cx={CX} cy={CY} r="44" stroke-width="0.75" opacity="0.35" />
+    <g class="reticle" style={`transform-origin: ${CX}px ${CY}px`}>
+      <circle cx={CX} cy={CY} r="60" stroke-width="0.75" stroke-dasharray="1 9" opacity="0.8" />
+      <line x1={CX} y1={CY - 66} x2={CX} y2={CY - 54} stroke-width="1.25" />
+    </g>
+    <circle cx={CX} cy={CY} r="4" stroke-width="1" />
+    <circle cx={CX} cy={CY} r="1.25" fill="currentColor" stroke="none" />
+  </g>
 </svg>
+
+<style>
+  .reticle {
+    animation: spin 40s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

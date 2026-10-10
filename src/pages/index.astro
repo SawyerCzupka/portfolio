@@ -1,160 +1,133 @@
 ---
 import Base from "../layouts/Base.astro";
 import HeroBackground from "../components/HeroBackground.astro";
-import { getCollection } from "astro:content";
-import PostList from "@/components/PostList.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { getProjects } from "@/lib/projects";
+import { getExperience } from "@/lib/experience";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const featuredProjects = await getProjects(({ data }) => data.featured);
+const experience = await getExperience();
+const current = experience.find((e) => e.current);
 
-const featuredProjects = await getCollection(
-  "projects",
-  ({ data }) => data.featured,
-);
+const spec = [
+  { label: "focus", value: "Backend systems, data pipelines, infrastructure" },
+  { label: "previously", value: "RAG systems · LLM evaluation · ML research at William & Mary" },
+  { label: "off hours", value: "Kubernetes homelab · sim racing telemetry" },
+];
 ---
 
 <Base title="Sawyer Czupka">
-  {/* ── Hero ─────────────────────────────────────────────── */}
-  <section class="max-w-5xl mx-auto px-6 pt-16 pb-24 relative overflow-hidden">
-    {/* Background: large dot grid + geometric composition, right half */}
-    <HeroBackground
-      class="hidden lg:block absolute -right-6 -top-4 text-faint opacity-[0.22] pointer-events-none"
-    />
+  <section class="max-w-5xl mx-auto px-6 pt-20 sm:pt-28 pb-28">
+    <div class="grid gap-16 lg:grid-cols-[1fr_auto] lg:items-center">
+      <div class="max-w-2xl">
+        {
+          current && (
+            <p class="flex items-center gap-2.5 font-mono text-xs text-muted mb-10">
+              <span class="relative flex size-2">
+                <span class="absolute inset-0 bg-accent animate-ping opacity-60" />
+                <span class="relative size-2 bg-accent" />
+              </span>
+              {current.title} at{" "}
+              <a
+                href={current.url ?? undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-draw text-text hover:text-accent pb-0.5"
+              >
+                {current.org}
+              </a>
+            </p>
+          )
+        }
 
-    {/* Content floats above the background */}
-    <div class="relative z-10 max-w-2xl">
-      <p class="font-mono text-xs text-accent tracking-widest mb-6 uppercase">
-        // portfolio
-      </p>
+        <h1 class="font-serif text-7xl sm:text-8xl leading-[0.85] tracking-tight text-text mb-10">
+          Sawyer<br /><em class="text-accent">Czupka</em>
+        </h1>
 
-      <h1
-        class="text-5xl sm:text-6xl font-bold leading-none tracking-tight text-text mb-4"
-      >
-        Sawyer Czupka
-      </h1>
+        <p class="text-lg sm:text-xl text-muted leading-relaxed mb-12 max-w-xl">
+          Backend-first software engineer. I build APIs, data pipelines, and the
+          infrastructure underneath them. Right now that means connecting AI
+          call-handling to the dispatch systems 911 centers run on.
+        </p>
 
-      <div class="flex items-center gap-3 mb-6">
-        <div class="h-px w-12 bg-accent shrink-0"></div>
-        <div class="h-px w-32 bg-border-strong"></div>
+        <dl class="grid grid-cols-[6.5rem_1fr] gap-y-3 border-t border-border pt-6 mb-12 text-sm">
+          {
+            spec.map(({ label, value }) => (
+              <>
+                <dt class="font-mono text-[11px] uppercase tracking-wide text-faint pt-0.5">{label}</dt>
+                <dd class="text-text">{value}</dd>
+              </>
+            ))
+          }
+        </dl>
+
+        <div class="flex flex-wrap items-center gap-x-8 gap-y-4 font-mono text-sm">
+          <a
+            href="/resume"
+            class="group inline-flex items-center gap-3 bg-text text-bg px-5 py-3 hover:bg-accent transition-colors duration-150"
+          >
+            resume
+            <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+          </a>
+          <a href="/projects" class="link-draw text-text hover:text-accent pb-0.5">projects →</a>
+          <a
+            href="https://github.com/sawyerczupka"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link-draw text-muted hover:text-accent pb-0.5"
+          >
+            github ↗
+          </a>
+        </div>
       </div>
 
-      <p class="text-xl sm:text-2xl font-medium text-muted leading-snug mb-6">
-        Software Engineer.<br />
-        Full-stack · ML Systems · Infrastructure.
-      </p>
-
-      <p class="text-base text-muted leading-relaxed mb-10">
-        I build production software across backend engineering, ML systems, and
-        cloud infrastructure. I'm a backend-first full-stack engineer — API
-        design, data pipelines, and system architecture are where I'm most at
-        home, though I'm fully capable on the frontend too.
-        <br /><br />
-        My ML work spans both applied systems and model development. On the applied
-        side I've built RAG pipelines, LLM evaluation frameworks, and production model-serving
-        infrastructure. On the research side I've trained models from scratch — dense
-        neural networks, graph neural networks, transformers, reinforcement learning
-        agents, and computer vision classifiers — through my work at William & Mary.
-        <br /><br />
-        I'm also comfortable managing the full infrastructure stack: Kubernetes clusters,
-        CI/CD automation, cloud deployments on Azure and Cloudflare, Terraform-provisioned
-        environments, and self-hosted homelab services.
-        <br /><br />
-        Recently finished my BS in Computer Science & Data Science at William & Mary,
-        Cum Laude.
-      </p>
-
-      <div class="flex flex-wrap gap-4">
-        <a
-          href="/resume"
-          class="font-mono text-sm text-accent border border-accent px-5 py-2.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide"
-        >
-          → my resume
-        </a>
-        <a
-          href="/projects"
-          class="font-mono text-sm text-text border border-border-strong px-5 py-2.5 hover:border-accent hover:text-accent transition-colors duration-150 tracking-wide"
-        >
-          → view projects
-        </a>
-      </div>
+      <HeroBackground class="hidden lg:block w-[360px] h-auto" />
     </div>
   </section>
 
-  {/* ── Divider ──────────────────────────────────────────── */}
-  <!-- <div class="max-w-5xl mx-auto px-6">
-    <div class="border-t border-border"></div>
-  </div>
+  <section class="max-w-5xl mx-auto px-6 pb-24">
+    <SectionHeading index="01" title="Selected work" href="/projects" linkLabel="all projects" />
 
-  {/* ── Recent Writing ───────────────────────────────────── */}
-  <section class="max-w-5xl mx-auto px-6 py-12">
-    <div class="flex items-center justify-between mb-10">
-      <h2 class="font-mono text-xs text-muted tracking-widest uppercase">
-        // recent writing
-      </h2>
-      <a
-        href="/writing"
-        class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
-      >
-        all posts →
-      </a>
-    </div>
-
-    <PostList />
-  </section> -->
-
-  {/* ── Divider ──────────────────────────────────────────── */}
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="border-t border-border"></div>
-  </div>
-
-  {/* ── Projects Teaser ──────────────────────────────────── */}
-  <section class="max-w-5xl mx-auto px-6 py-16">
-    <div class="flex items-center justify-between mb-10">
-      <h2 class="font-mono text-xs text-muted tracking-widest uppercase">
-        // selected projects
-      </h2>
-      <a
-        href="/projects"
-        class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider"
-      >
-        all projects →
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border-strong">
+    <div class="grid gap-6 sm:grid-cols-2">
       {
-        featuredProjects.map((project) => (
-          <a
-            href={`/projects#${project.id}`}
-            class="group bg-bg p-6 hover:bg-surface transition-colors duration-150"
-          >
-            <div class="flex items-start justify-between mb-4">
-              <h3 class="font-semibold text-text group-hover:text-accent transition-colors duration-150">
-                {project.data.name}
-              </h3>
-              <span class="font-mono text-xs text-faint">
-                {project.data.period.match(/\d{4}/)?.[0]} →
-              </span>
+        featuredProjects.map((project, i) => (
+          <a href={`/projects#${project.id}`} class="brackets group block p-8">
+            <div class="flex items-baseline justify-between font-mono text-[11px] text-faint mb-8">
+              <span>{String.fromCharCode(65 + i)}</span>
+              <span>{project.data.period}</span>
             </div>
-            <p class="text-sm text-muted leading-relaxed mb-4">
-              {project.data.teaser}
+            <h3 class="font-serif text-3xl leading-tight text-text mb-1 group-hover:text-accent transition-colors duration-150">
+              {project.data.name}
+            </h3>
+            <p class="font-serif italic text-muted mb-5">{project.data.subtitle}</p>
+            <p class="text-sm text-muted leading-relaxed mb-8">{project.data.teaser}</p>
+            <p class="font-mono text-[11px] text-faint">
+              {project.data.stack.slice(0, 5).join(" / ")}
             </p>
-            <div class="flex flex-wrap gap-1.5">
-              {project.data.stack.slice(0, 4).map((t) => (
-                <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-0.5">
-                  {t}
-                </span>
-              ))}
-            </div>
           </a>
         ))
       }
-      {
-        featuredProjects.length % 2 !== 0 && (
-          <div class="bg-bg hidden sm:block" />
-        )
-      }
     </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-6">
+    <SectionHeading index="02" title="Experience" href="/resume" linkLabel="full resume" />
+
+    <ol role="list">
+      {
+        experience.map((job) => (
+          <li class="grid grid-cols-1 sm:grid-cols-[11rem_1fr_auto] gap-x-6 gap-y-1 py-5 border-b border-border first:border-t">
+            <span class="font-mono text-xs text-faint pt-1">{job.period}</span>
+            <span class="text-text">
+              {job.title}
+              <span class="text-muted"> — {job.org}</span>
+            </span>
+            {job.current && (
+              <span class="hidden sm:block font-mono text-[11px] text-accent pt-1">current</span>
+            )}
+          </li>
+        ))
+      }
+    </ol>
   </section>
 </Base>

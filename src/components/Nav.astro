@@ -1,48 +1,59 @@
 ---
+import { getCollection } from "astro:content";
+import ThemeToggle from "./ThemeToggle.astro";
+
+const hasPosts = (await getCollection("blog", ({ data }) => !data.draft)).length > 0;
+
 const navLinks = [
-  { href: "/", label: "home" },
-  { href: "/projects", label: "projects" },
-  { href: "/resume", label: "resume" },
-  { href: "/writing", label: "writing" },
+  { href: "/projects", label: "projects", sheet: "02" },
+  { href: "/resume", label: "resume", sheet: "03" },
+  ...(hasPosts ? [{ href: "/writing", label: "writing", sheet: "04" }] : []),
 ];
 
 const currentPath = Astro.url.pathname;
-
-function isActive(href: string): boolean {
-  if (href === "/") return currentPath === "/";
-  return currentPath.startsWith(href);
-}
+const isActive = (href: string) => currentPath.startsWith(href);
 ---
 
 <header
-  class="border-b border-border sticky top-0 z-50 bg-bg/95 backdrop-blur-sm"
+  class="sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-md"
 >
-  <nav class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-    <a
-      href="/"
-      class="font-sans font-semibold text-sm tracking-wide text-text hover:text-accent transition-colors duration-150"
-    >
-      SAWYER CZUPKA
+  <nav class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="/" class="group flex items-baseline gap-2.5" aria-label="Sawyer Czupka — home">
+      <span class="font-serif text-xl sm:text-2xl leading-none text-text whitespace-nowrap">
+        Sawyer <em class="text-accent">Czupka</em>
+      </span>
     </a>
 
-    <ul class="flex items-center gap-6" role="list">
-      {
-        navLinks.map((link) => (
-          <li>
-            <a
-              href={link.href}
-              class={`font-mono text-xs tracking-wider transition-colors duration-150 ${
-                isActive(link.href)
-                  ? "text-accent"
-                  : "text-muted hover:text-text"
-              }`}
-              aria-current={isActive(link.href) ? "page" : undefined}
-            >
-              {link.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="flex items-center gap-6 sm:gap-8">
+      <ul class="flex items-center gap-5 sm:gap-7" role="list">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class:list={[
+                  "group flex items-baseline gap-1.5 font-mono text-xs tracking-wide transition-colors duration-150",
+                  isActive(link.href) ? "text-text" : "text-muted hover:text-text",
+                ]}
+                aria-current={isActive(link.href) ? "page" : undefined}
+              >
+                <span
+                  class:list={[
+                    "hidden sm:inline text-[10px]",
+                    isActive(link.href) ? "text-accent" : "text-faint",
+                  ]}
+                >
+                  {link.sheet}
+                </span>
+                <span class:list={["link-draw pb-0.5", isActive(link.href) && "bg-size-[100%_1px]"]}>
+                  {link.label}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <ThemeToggle />
+    </div>
   </nav>
 </header>

@@ -1,0 +1,70 @@
+[
+  {
+    "id": "aurelian",
+    "title": "Software Engineer",
+    "org": "Aurelian",
+    "url": "https://aurelian.com",
+    "period": "Apr 2026 – Present",
+    "start": "2026-04",
+    "current": true,
+    "bullets": [
+      "Full-stack engineer on an AI call-handling platform for 911 dispatch centers, shipping across the real-time voice agent, backend services, dispatcher-facing web app, internal tooling, and cloud infrastructure.",
+      "Lead much of the platform's integration with agencies' computer-aided dispatch (CAD) systems across tens of agencies and many vendors, from architecture and on-prem deployments to customer migrations and working directly with agency staff.",
+      "Developed core turn-taking behavior for the voice agent, teaching it to recognize when a caller hasn't finished speaking and wait rather than interrupt, with instrumentation to measure the impact on production calls.",
+      "Keep production systems reliable as part of the on-call rotation, building the failure handling, monitoring, and alerting that let engineering and support catch and resolve issues quickly."
+    ]
+  },
+  {
+    "id": "luminexis",
+    "title": "Software Engineering Intern (Sole Engineer)",
+    "org": "Luminexis AI / Threat Tec",
+    "url": null,
+    "period": "Aug 2025 – Dec 2025",
+    "start": "2025-08",
+    "current": false,
+    "bullets": [
+      "Built full-stack React/FastAPI application with JWT authentication, role-based access control, admin dashboards, and ROI tracking tools for identifying AI automation opportunities.",
+      "Engineered LLM-powered document analysis pipeline using Azure OpenAI and Document Intelligence to extract requirements, risk factors, and action items from 140+ contract PDFs — reducing manual review time from hours to minutes per document.",
+      "Deployed production RAG chatbot with Qdrant vector database and LlamaIndex achieving 70–80% on RAGAS evaluation metrics for domain-specific Q&A across configurable knowledge bases.",
+      "Provisioned 4-environment Azure infrastructure (Dev, Staging, Demo, Production) using Terraform with shared modules, managing Container Apps, PostgreSQL, Key Vault, AI Foundry, and private networking; implemented CI/CD with GitHub Actions."
+    ]
+  },
+  {
+    "id": "teamculture",
+    "title": "Machine Learning & Software Engineer",
+    "org": "Teamculture.ai / L10.tech",
+    "url": null,
+    "period": "Jan 2024 – Sept 2024",
+    "start": "2024-01",
+    "current": false,
+    "bullets": [
+      "Developed serverless RAG evaluation system using AWS Lambda, API Gateway, and DeepEval to automate performance monitoring — reducing evaluation runtime from manual testing to an automated pipeline.",
+      "Built Vue/FastAPI interface for creating evaluations and curating golden example datasets, enabling systematic quality measurement and iterative improvement of AI services at scale."
+    ]
+  },
+  {
+    "id": "geolab",
+    "title": "Machine Learning Technical Lead",
+    "org": "GeoLab @ William & Mary",
+    "url": null,
+    "period": "Jan 2023 – May 2025",
+    "start": "2023-01",
+    "current": false,
+    "bullets": [
+      "Led cross-functional ML integration across frontend, backend, and ML subteams for the SCOPE research platform, establishing technical requirements and coordinating implementation of RAG capabilities.",
+      "Architected microservice-based RAG system on Kubernetes using Qdrant, vLLM, LlamaIndex, and FastAPI; built custom document processing pipeline with Vision-Language Models (Qwen-2.5-VL) for extracting text and structure from complex PDF/DOCX documents — reducing parsing errors by over 50%."
+    ]
+  },
+  {
+    "id": "world-bank",
+    "title": "Machine Learning & Software Engineer Intern",
+    "org": "The World Bank & GEF",
+    "url": null,
+    "period": "May 2023 – Sept 2023",
+    "start": "2023-05",
+    "current": false,
+    "bullets": [
+      "Built RAG-based system automating analysis of 24,000+ GEF project documents for large-scale socioeconomic impact evaluation — enabling data-driven funding allocation and strategic planning decisions for the first time."
+    ]
+  }
+]

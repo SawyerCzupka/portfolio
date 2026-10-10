@@ -1,102 +1,81 @@
 ---
 import Base from "../layouts/Base.astro";
-import GeoAccent from "../components/GeoAccent.astro";
-import Rectengles from "@/components/Rectengles.astro";
-import { getCollection } from "astro:content";
+import PageHeader from "../components/PageHeader.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { getProjects } from "@/lib/projects";
 
-const projectEntries = await getCollection("projects");
-const projects = projectEntries.map((e) => ({ id: e.id, ...e.data }));
+const projects = (await getProjects()).map((e) => ({ id: e.id, ...e.data }));
+const personal = projects.filter((p) => !p.academic);
+const academic = projects.filter((p) => p.academic);
 ---
 
 <Base
   title="Projects — Sawyer Czupka"
+  sheet="02 — projects"
   description="Personal projects in ML systems, infrastructure, and full-stack engineering."
 >
-  <div class="max-w-5xl mx-auto px-6 py-16">
-    <header class="mb-16 relative overflow-hidden">
-      {/* Nested rectangles emanating from the top-right corner */}
-      <Rectengles />
+  <div class="max-w-5xl mx-auto px-6">
+    <PageHeader
+      sheet="02"
+      title="Projects"
+      lead="Personal and academic projects — things built to learn, ship, and run."
+    />
 
-      <div class="relative z-10">
-        <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
-          // projects
-        </p>
-        <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
-          Projects
-        </h1>
-        <p class="text-muted mt-4 max-w-lg leading-relaxed">
-          Personal and academic projects — things built to learn, ship, and run.
-        </p>
-      </div>
-    </header>
+    {
+      personal.map((project, i) => (
+        <article
+          id={project.id}
+          class="grid gap-8 md:grid-cols-[12rem_1fr] py-16 border-b border-border scroll-mt-20"
+        >
+          <aside class="flex md:flex-col gap-6 md:gap-4 items-baseline md:items-start">
+            <span class="font-serif text-6xl leading-none text-faint">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span class="font-mono text-xs text-faint">{project.period}</span>
+            {project.url && (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-draw font-mono text-xs text-accent pb-0.5"
+              >
+                {new URL(project.url).host} ↗
+              </a>
+            )}
+          </aside>
 
-    {/* Project list */}
-    <div class="space-y-0">
-      {
-        projects.map((project) => (
-          <article
-            id={project.id}
-            class="border-t border-border pt-12 pb-12 relative"
-          >
-            {/* <GeoAccent
-            variant="corner"
-            class="absolute right-0 top-12 text-faint hidden md:block"
-          /> */}
-
-            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
-              <div>
-                <div class="flex items-center gap-3">
-                  <h2 class="text-2xl font-bold text-text">{project.name}</h2>
-                  {project.academic && (
-                    <span class="font-mono text-xs text-accent border border-accent px-2 py-0.5 shrink-0">
-                      academic
-                    </span>
-                  )}
-                </div>
-                <p class="text-muted text-sm mt-1">{project.subtitle}</p>
-              </div>
-              <div class="flex items-center gap-4 shrink-0">
-                <span class="font-mono text-xs text-faint tracking-wider">
-                  {project.period}
-                </span>
-                {project.url && (
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="font-mono text-xs text-accent border border-accent px-3 py-1.5 hover:bg-accent hover:text-bg transition-colors duration-150 tracking-wide"
-                  >
-                    ↗ visit
-                  </a>
-                )}
-              </div>
-            </div>
-
-            <p class="text-muted leading-relaxed mb-8 max-w-3xl">
-              {project.description}
-            </p>
-
-            <ul class="space-y-3 mb-8 max-w-3xl" role="list">
+          <div>
+            <h2 class="font-serif text-4xl sm:text-5xl leading-none text-text">{project.name}</h2>
+            <p class="font-serif italic text-lg text-muted mt-2 mb-8">{project.subtitle}</p>
+            <p class="text-text/90 leading-relaxed mb-8 max-w-2xl">{project.description}</p>
+            <ul class="space-y-3 mb-10 max-w-2xl" role="list">
               {project.highlights.map((h) => (
-                <li class="flex gap-3 text-sm text-muted leading-relaxed">
-                  <span class="text-accent shrink-0 font-mono mt-0.5">—</span>
+                <li class="grid grid-cols-[1.5rem_1fr] text-sm text-muted leading-relaxed">
+                  <span class="text-accent font-mono">+</span>
                   <span>{h}</span>
                 </li>
               ))}
             </ul>
+            <p class="font-mono text-[11px] text-faint">{project.stack.join(" / ")}</p>
+          </div>
+        </article>
+      ))
+    }
 
-            <div class="flex flex-wrap gap-2">
-              {project.stack.map((tech) => (
-                <span class="font-mono text-xs text-muted bg-surface-2 border border-border-strong px-2 py-1">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </article>
-        ))
-      }
-
-      <div class="border-t border-border"></div>
-    </div>
+    <section class="pt-24">
+      <SectionHeading index="A" title="Coursework & research" />
+      <div class="grid gap-6 sm:grid-cols-2">
+        {
+          academic.map((project) => (
+            <article id={project.id} class="brackets p-7 scroll-mt-20">
+              <h3 class="font-serif text-2xl leading-tight text-text mb-1">{project.name}</h3>
+              <p class="font-serif italic text-sm text-muted mb-4">{project.subtitle}</p>
+              <p class="text-sm text-muted leading-relaxed mb-6">{project.description}</p>
+              <p class="font-mono text-[11px] text-faint">{project.stack.join(" / ")}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
   </div>
 </Base>

@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -8,39 +9,16 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 
 <Base
   title="Writing — Sawyer Czupka"
+  sheet="04 — writing"
   description="Articles on ML systems, infrastructure, and software engineering."
 >
-  <div class="max-w-5xl mx-auto px-6 py-16">
+  <div class="max-w-5xl mx-auto px-6">
 
-    {/* Page header — background: horizontal ruled lines (engineering paper) */}
-    <header class="mb-16 relative overflow-hidden pb-2">
-      {/* Ruled lines spanning the full header area */}
-      <svg
-        class="absolute inset-0 w-full h-full text-faint opacity-[0.20] pointer-events-none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <defs>
-          <pattern id="writing-ruled" x="0" y="0" width="2000" height="28" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="2000" y2="0" stroke="currentColor" stroke-width="0.6" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#writing-ruled)" />
-      </svg>
-
-      <div class="relative z-10">
-        <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">
-          // writing
-        </p>
-        <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight">
-          Writing
-        </h1>
-        <p class="text-muted mt-4 max-w-lg leading-relaxed">
-          Notes and articles on ML systems, infrastructure, software engineering,
-          and whatever I'm currently building or thinking about.
-        </p>
-      </div>
-    </header>
+    <PageHeader
+      sheet="04"
+      title="Writing"
+      lead="Notes and articles on ML systems, infrastructure, software engineering, and whatever I'm currently building or thinking about."
+    />
 
     {/* Post list */}
     {posts.length === 0 ? (
@@ -63,7 +41,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
                   {dateStr}
                 </time>
                 <div>
-                  <h2 class="text-base font-semibold text-text group-hover:text-accent transition-colors duration-150 mb-1">
+                  <h2 class="font-serif text-2xl leading-tight text-text group-hover:text-accent transition-colors duration-150 mb-2">
                     {post.data.title}
                   </h2>
                   <p class="text-sm text-muted leading-relaxed mb-3">

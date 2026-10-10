@@ -1,6 +1,5 @@
 ---
 import Base from "./Base.astro";
-import GeoAccent from "../components/GeoAccent.astro";
 
 interface Props {
   frontmatter: {
@@ -18,9 +17,10 @@ const dateStr = frontmatter.date.toISOString().slice(0, 10);
 
 <Base
   title={`${frontmatter.title} — Sawyer Czupka`}
+  sheet="04 — writing"
   description={frontmatter.description}
 >
-  <article class="max-w-4xl mx-auto px-6 py-16">
+  <article class="max-w-3xl mx-auto px-6 py-16">
     {/* Back link */}
     <a
       href="/writing"
@@ -31,11 +31,6 @@ const dateStr = frontmatter.date.toISOString().slice(0, 10);
 
     {/* Header */}
     <header class="mb-8 relative">
-      <GeoAccent
-        variant="corner"
-        class="absolute right-0 top-0 text-faint opacity-50"
-      />
-
       <div class="flex items-center gap-4 mb-6">
         <time
           datetime={dateStr}
@@ -56,7 +51,7 @@ const dateStr = frontmatter.date.toISOString().slice(0, 10);
         }
       </div>
 
-      <h1 class="text-3xl sm:text-4xl font-bold leading-tight text-text mb-4">
+      <h1 class="font-serif text-5xl sm:text-6xl leading-[0.95] text-text mb-6">
         {frontmatter.title}
       </h1>
       <p class="text-muted text-lg leading-relaxed max-w-2xl">
