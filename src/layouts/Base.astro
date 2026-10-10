@@ -8,14 +8,14 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
-  /** Short label for the footer title block, e.g. "resume". */
+  /** Footer title-block label, e.g. "03 — resume". */
   sheet?: string;
 }
 
 const {
   title,
   description = "Sawyer Czupka — software engineer working across backend systems, ML, and infrastructure.",
-  sheet = "index",
+  sheet = "01 — index",
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);

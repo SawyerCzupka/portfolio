@@ -5,9 +5,9 @@ import ThemeToggle from "./ThemeToggle.astro";
 const hasPosts = (await getCollection("blog", ({ data }) => !data.draft)).length > 0;
 
 const navLinks = [
-  { href: "/projects", label: "projects" },
-  { href: "/resume", label: "resume" },
-  ...(hasPosts ? [{ href: "/writing", label: "writing" }] : []),
+  { href: "/projects", label: "projects", sheet: "02" },
+  { href: "/resume", label: "resume", sheet: "03" },
+  ...(hasPosts ? [{ href: "/writing", label: "writing", sheet: "04" }] : []),
 ];
 
 const currentPath = Astro.url.pathname;
@@ -19,7 +19,7 @@ const isActive = (href: string) => currentPath.startsWith(href);
 >
   <nav class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
     <a href="/" class="group flex items-baseline gap-2.5" aria-label="Sawyer Czupka — home">
-      <span class="font-serif text-2xl leading-none text-text">
+      <span class="font-serif text-xl sm:text-2xl leading-none text-text whitespace-nowrap">
         Sawyer <em class="text-accent">Czupka</em>
       </span>
     </a>
@@ -27,7 +27,7 @@ const isActive = (href: string) => currentPath.startsWith(href);
     <div class="flex items-center gap-6 sm:gap-8">
       <ul class="flex items-center gap-5 sm:gap-7" role="list">
         {
-          navLinks.map((link, i) => (
+          navLinks.map((link) => (
             <li>
               <a
                 href={link.href}
@@ -43,7 +43,7 @@ const isActive = (href: string) => currentPath.startsWith(href);
                     isActive(link.href) ? "text-accent" : "text-faint",
                   ]}
                 >
-                  0{i + 1}
+                  {link.sheet}
                 </span>
                 <span class:list={["link-draw pb-0.5", isActive(link.href) && "bg-size-[100%_1px]"]}>
                   {link.label}
