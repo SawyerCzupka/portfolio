@@ -1,0 +1,11 @@
+name = "sawyer-portfolio-lab-hub"
+main = "src/index.ts"
+compatibility_date = "2026-02-19"
+
+[[durable_objects.bindings]]
+name = "HUB"
+class_name = "GenomeHub"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["GenomeHub"]
