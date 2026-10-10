@@ -23,40 +23,39 @@ const academic = projects.filter((p) => p.academic);
 
     {
       personal.map((project, i) => (
-        <article
-          id={project.id}
-          class="grid gap-8 md:grid-cols-[12rem_1fr] py-16 border-b border-border scroll-mt-20"
-        >
-          <aside class="flex md:flex-col gap-6 md:gap-4 items-baseline md:items-start">
-            <span class="font-serif text-6xl leading-none text-faint">
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <span class="font-mono text-xs text-faint">{project.period}</span>
-            {project.url && (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="link-draw font-mono text-xs text-accent pb-0.5"
-              >
-                {new URL(project.url).host} ↗
-              </a>
-            )}
-          </aside>
+        <article id={project.id} class="py-16 scroll-mt-20">
+          <div data-island class="grid gap-8 md:grid-cols-[12rem_1fr]">
+            <aside class="flex md:flex-col gap-6 md:gap-4 items-baseline md:items-start">
+              <span class="font-serif text-6xl leading-none text-faint">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span class="font-mono text-xs text-faint">{project.period}</span>
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="link-draw font-mono text-xs text-accent pb-0.5"
+                >
+                  {new URL(project.url).host} ↗
+                </a>
+              )}
+            </aside>
 
-          <div>
-            <h2 class="font-serif text-4xl sm:text-5xl leading-none text-text">{project.name}</h2>
-            <p class="font-serif italic text-lg text-muted mt-2 mb-8">{project.subtitle}</p>
-            <p class="text-text/90 leading-relaxed mb-8 max-w-2xl">{project.description}</p>
-            <ul class="space-y-3 mb-10 max-w-2xl" role="list">
-              {project.highlights.map((h) => (
-                <li class="grid grid-cols-[1.5rem_1fr] text-sm text-muted leading-relaxed">
-                  <span class="text-accent font-mono">+</span>
-                  <span>{h}</span>
-                </li>
-              ))}
-            </ul>
-            <p class="font-mono text-[11px] text-faint">{project.stack.join(" / ")}</p>
+            <div>
+              <h2 class="font-serif text-4xl sm:text-5xl leading-none text-text">{project.name}</h2>
+              <p class="font-serif italic text-lg text-muted mt-2 mb-8">{project.subtitle}</p>
+              <p class="text-text/90 leading-relaxed mb-8 max-w-2xl">{project.description}</p>
+              <ul class="space-y-3 mb-10 max-w-2xl" role="list">
+                {project.highlights.map((h) => (
+                  <li class="grid grid-cols-[1.5rem_1fr] text-sm text-muted leading-relaxed">
+                    <span class="text-accent font-mono">+</span>
+                    <span>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <p class="font-mono text-[11px] text-faint">{project.stack.join(" / ")}</p>
+            </div>
           </div>
         </article>
       ))
@@ -67,7 +66,7 @@ const academic = projects.filter((p) => p.academic);
       <div class="grid gap-6 sm:grid-cols-2">
         {
           academic.map((project) => (
-            <article id={project.id} class="brackets p-7 scroll-mt-20">
+            <article id={project.id} data-island="bare" class="brackets p-7 scroll-mt-20">
               <h3 class="font-serif text-2xl leading-tight text-text mb-1">{project.name}</h3>
               <p class="font-serif italic text-sm text-muted mb-4">{project.subtitle}</p>
               <p class="text-sm text-muted leading-relaxed mb-6">{project.description}</p>

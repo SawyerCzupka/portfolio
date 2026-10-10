@@ -1,4 +1,4 @@
-import { VERT, STEP, STATS, PAINT, DRAW } from "./shaders";
+import { VERT, STEP, STATS, PAINT, DRAW, ISLANDS } from "./shaders";
 import { K, GENOME_LEN, population, observe, evolve } from "./evolve";
 
 const STAT_BLOCK = 8;
@@ -166,18 +166,41 @@ export class Sim {
     });
   }
 
-  /** Draw cover-fit to the canvas's current drawing buffer; `colors` is K rgb triples in 0..1. */
-  draw(colors: number[]) {
+  /** Grid cell under a viewport point (CSS px), accounting for page scroll. */
+  cellAt(clientX: number, clientY: number, scroll: number, dpr: number) {
+    const cell = this.gl.drawingBufferWidth / this.w;
+    const y = ((clientY + scroll) * dpr) / cell;
+    return { x: (clientX * dpr) / cell, y: ((y % this.h) + this.h) % this.h };
+  }
+
+  /** Species slot at a grid cell, or null if empty. */
+  probe(x: number, y: number): number | null {
+    const gl = this.gl;
+    const px = new Float32Array(4);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.targets[0].fb);
+    gl.readBuffer(gl.COLOR_ATTACHMENT0);
+    gl.readPixels(x | 0, y | 0, 1, 1, gl.RGBA, gl.FLOAT, px);
+    const best = px.indexOf(Math.max(...px));
+    return px[best] > 0.05 ? best : null;
+  }
+
+  /**
+   * Draw to the canvas, scrolled with the page.
+   * - `colors`: K rgb triples in 0..1
+   * - `islands`: up to ISLANDS page-space knockout boxes (x, y, w, h in CSS px), flattened
+   */
+  draw(colors: number[], scroll: number, dpr: number, islands: number[] = []) {
     const gl = this.gl;
     const [cw, ch] = [gl.drawingBufferWidth, gl.drawingBufferHeight];
-    const cell = Math.max(cw / this.w, ch / this.h);
     this.pass(
       this.progs.draw,
       (u) => {
         gl.uniform3fv(u("u_colors"), colors);
-        gl.uniform1f(u("u_cell"), cell);
-        gl.uniform2f(u("u_offset"), (cw - cell * this.w) / 2, (ch - cell * this.h) / 2);
+        gl.uniform1f(u("u_cell"), cw / this.w);
         gl.uniform1f(u("u_height"), ch);
+        gl.uniform1f(u("u_dpr"), dpr);
+        gl.uniform1f(u("u_scroll"), scroll);
+        gl.uniform4fv(u("u_islands"), [...islands, ...Array(ISLANDS * 4).fill(0)].slice(0, ISLANDS * 4));
       },
       null,
       [cw, ch],

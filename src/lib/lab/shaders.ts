@@ -136,16 +136,25 @@ void main() {
 }`;
 
 // Halftone glyphs: one mark per cell, sized by mass; species are legend
-// symbols (dot, plus, ring, cross) rather than hues.
+// symbols (dot, plus, ring, cross) rather than hues. The toroidal world scrolls
+// with the page. A cell whose centre falls in an island box (page-space CSS px)
+// is not drawn at all, so island edges follow the cell grid.
+export const ISLANDS = 32;
 export const DRAW = `${HEAD}
 uniform vec3 u_colors[4];
-uniform float u_cell;
-uniform vec2 u_offset;
-uniform float u_height;
+uniform float u_cell, u_height, u_dpr, u_scroll;
+uniform vec4 u_islands[${ISLANDS}];
 out vec4 o;
 float bar(vec2 l, float r, float t) { return max(min(abs(l.x), abs(l.y)) - t, max(abs(l.x), abs(l.y)) - r); }
 void main() {
-  vec2 c = (vec2(gl_FragCoord.x, u_height - gl_FragCoord.y) - u_offset) / u_cell;
+  vec2 px = vec2(gl_FragCoord.x, u_height - gl_FragCoord.y) + vec2(0.0, u_scroll * u_dpr);
+  vec2 centre = (floor(px / u_cell) + 0.5) * u_cell / u_dpr;
+  for (int i = 0; i < ${ISLANDS}; i++) {
+    vec4 b = u_islands[i];
+    if (all(greaterThan(centre, b.xy)) && all(lessThan(centre, b.xy + b.zw))) { o = vec4(0.0); return; }
+  }
+  float world = u_cell * float(textureSize(u_mass, 0).y);
+  vec2 c = vec2(px.x, mod(px.y, world)) / u_cell;
   vec2 l = fract(c) - 0.5;
   vec4 m = M(ivec2(floor(c)));
   int s = owner(m);

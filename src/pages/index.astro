@@ -19,7 +19,7 @@ const spec = [
 <Base title="Sawyer Czupka">
   <section class="max-w-5xl mx-auto px-6 pt-20 sm:pt-28 pb-28">
     <div class="grid gap-16 lg:grid-cols-[1fr_auto] lg:items-center">
-      <div class="max-w-2xl">
+      <div data-island class="max-w-2xl">
         {
           current && (
             <p class="flex items-center gap-2.5 font-mono text-xs text-muted mb-10">
@@ -91,7 +91,7 @@ const spec = [
     <div class="grid gap-6 sm:grid-cols-2">
       {
         featuredProjects.map((project, i) => (
-          <a href={`/projects#${project.id}`} class="brackets group block p-8">
+          <a href={`/projects#${project.id}`} data-island="bare" class="brackets group block p-8">
             <div class="flex items-baseline justify-between font-mono text-[11px] text-faint mb-8">
               <span>{String.fromCharCode(65 + i)}</span>
               <span>{project.data.period}</span>
@@ -113,7 +113,7 @@ const spec = [
   <section class="max-w-5xl mx-auto px-6">
     <SectionHeading index="02" title="Experience" href="/resume" linkLabel="full resume" />
 
-    <ol role="list">
+    <ol data-island="bare" role="list">
       {
         experience.map((job) => (
           <li class="grid grid-cols-1 sm:grid-cols-[11rem_1fr_auto] gap-x-6 gap-y-1 py-5 border-b border-border first:border-t">
