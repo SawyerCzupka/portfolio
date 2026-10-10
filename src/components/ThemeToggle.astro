@@ -1,0 +1,27 @@
+<button
+  type="button"
+  data-theme-toggle
+  class="group size-8 -mr-1.5 grid place-items-center text-muted hover:text-accent transition-colors duration-150 cursor-pointer"
+  aria-label="Toggle light and dark theme"
+>
+  {/* Half-filled disc: the filled side flips with the theme. */}
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <circle cx="8" cy="8" r="6.5" stroke="currentColor" />
+    <path
+      d="M8 1.5a6.5 6.5 0 0 1 0 13z"
+      fill="currentColor"
+      class="origin-center transition-transform duration-300 dark:rotate-180"
+    />
+  </svg>
+</button>
+
+<script>
+  const bind = () => {
+    document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem("theme", next);
+    });
+  };
+  document.addEventListener("astro:page-load", bind);
+</script>

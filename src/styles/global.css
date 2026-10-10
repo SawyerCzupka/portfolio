@@ -1,58 +1,68 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* ─── Design Tokens ─────────────────────────────────────────
-   To change the accent color sitewide, edit --color-accent.
-   All other tokens follow from there.
+   Dark is the default; [data-theme="light"] swaps the palette
+   to a drafting-paper variant. Utilities read these variables,
+   so components never branch on theme.
 ──────────────────────────────────────────────────────────── */
 @theme {
-  /* Accent — swap this one value to recolor the whole site */
-  /* --color-accent: #10b981; */
-  /* --color-accent: oklch(71.2% 0.194 13.428); */
-  /* --color-accent: oklch(69.6% 0.17 162.48); */
   --color-accent: oklch(76.5% 0.177 163.223);
-  --color-accent-dim: #052e1c;
+  --color-accent-dim: oklch(32% 0.07 163);
 
-  /* Surface scale */
-  --color-bg: #090909;
-  --color-surface: #111111;
-  --color-surface-2: #181818;
+  --color-bg: #0c0c0b;
+  --color-surface: #131312;
+  --color-surface-2: #1a1a18;
 
-  /* Borders */
-  --color-border: #1e1e1e;
-  --color-border-strong: #2b2b2b;
+  --color-border: #22221f;
+  --color-border-strong: #32322e;
 
-  /* Text */
-  --color-text: #eeeeee;
-  --color-muted: #b0b0b0;
-  --color-faint: #666666;
+  --color-text: #ecebe6;
+  --color-muted: #a9a79f;
+  --color-faint: #6a6862;
 
-  /* Fonts */
-  --font-sans: "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
 
-  /* No border-radius — sharp corners */
   --radius-DEFAULT: 0px;
+}
+
+:root[data-theme="light"] {
+  --color-accent: oklch(52% 0.12 163);
+  --color-accent-dim: oklch(86% 0.06 163);
+
+  --color-bg: #f3f1ea;
+  --color-surface: #ebe8df;
+  --color-surface-2: #e3dfd3;
+
+  --color-border: #dbd6c9;
+  --color-border-strong: #c4beae;
+
+  --color-text: #1b1a17;
+  --color-muted: #55534b;
+  --color-faint: #8e8a7e;
 }
 
 /* ─── Base ──────────────────────────────────────────────── */
 @layer base {
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
-
   html {
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color-scheme: dark;
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
   }
 
   ::selection {
     background-color: var(--color-accent);
-    color: #000;
+    color: var(--color-bg);
   }
 
   a {
@@ -60,79 +70,128 @@
     text-decoration: none;
   }
 
+  :focus-visible {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+}
+
+/* ─── Components ────────────────────────────────────────── */
+@layer components {
+  /* Sheet margins: hairlines at the content edges, like a drawing border. */
+  .sheet {
+    position: relative;
+  }
+  .sheet::before,
+  .sheet::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .sheet::before {
+    left: max(0.75rem, calc(50% - 32rem - 1.5rem));
+  }
+  .sheet::after {
+    right: max(0.75rem, calc(50% - 32rem - 1.5rem));
+  }
+
+  /* Registration marks: four corner brackets drawn with gradients. */
+  .brackets {
+    --bracket: 10px;
+    --bracket-color: var(--color-border-strong);
+    position: relative;
+    background:
+      linear-gradient(var(--bracket-color), var(--bracket-color)) top left / var(--bracket) 1px,
+      linear-gradient(var(--bracket-color), var(--bracket-color)) top left / 1px var(--bracket),
+      linear-gradient(var(--bracket-color), var(--bracket-color)) top right / var(--bracket) 1px,
+      linear-gradient(var(--bracket-color), var(--bracket-color)) top right / 1px var(--bracket),
+      linear-gradient(var(--bracket-color), var(--bracket-color)) bottom left / var(--bracket) 1px,
+      linear-gradient(var(--bracket-color), var(--bracket-color)) bottom left / 1px var(--bracket),
+      linear-gradient(var(--bracket-color), var(--bracket-color)) bottom right / var(--bracket) 1px,
+      linear-gradient(var(--bracket-color), var(--bracket-color)) bottom right / 1px var(--bracket);
+    background-repeat: no-repeat;
+    transition: --bracket 200ms ease;
+  }
+  .brackets:hover,
+  .brackets:focus-visible {
+    --bracket: 18px;
+    --bracket-color: var(--color-accent);
+  }
+
+  /* Underline that draws in from the left on hover. */
+  .link-draw {
+    background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+    transition: background-size 250ms ease, color 150ms ease;
+  }
+  .link-draw:hover,
+  .link-draw:focus-visible {
+    background-size: 100% 1px;
+  }
+
   /* ─── Prose (blog post content) ─── */
   .prose {
     color: var(--color-text);
-    /* max-width: 68ch; */
+    font-size: 1.0625rem;
   }
-
-  .prose h1,
   .prose h2,
   .prose h3,
   .prose h4 {
-    font-weight: 600;
     line-height: 1.2;
-    margin-top: 2em;
+    margin-top: 2.2em;
     margin-bottom: 0.6em;
-    color: var(--color-text);
   }
-
   .prose h2 {
-    font-size: 1.4rem;
-    border-bottom: 1px solid var(--color-border-strong);
-    padding-bottom: 0.4em;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 2rem;
   }
-
   .prose h3 {
+    font-weight: 600;
     font-size: 1.15rem;
-    color: var(--color-accent);
   }
-
-  .prose p {
-    margin-bottom: 1.2em;
-    line-height: 1.75;
-    color: #c8c8c8;
-  }
-
+  .prose p,
   .prose ul,
   .prose ol {
     margin-bottom: 1.2em;
-    padding-left: 1.5em;
     line-height: 1.75;
-    color: #c8c8c8;
+    color: var(--color-muted);
   }
-
+  .prose ul,
+  .prose ol {
+    padding-left: 1.5em;
+  }
   .prose ul {
-    list-style-type: disc;
+    list-style-type: "— ";
   }
-
   .prose ol {
     list-style-type: decimal;
   }
-
   .prose li {
     margin-bottom: 0.4em;
   }
-
+  .prose li::marker {
+    color: var(--color-faint);
+  }
   .prose a {
     color: var(--color-accent);
     border-bottom: 1px solid var(--color-accent-dim);
     transition: border-color 0.15s;
   }
-
   .prose a:hover {
     border-bottom-color: var(--color-accent);
   }
-
   .prose code {
     font-family: var(--font-mono);
     font-size: 0.85em;
     background-color: var(--color-surface-2);
-    color: var(--color-accent);
     padding: 0.15em 0.4em;
-    border: 1px solid var(--color-border-strong);
+    border: 1px solid var(--color-border);
   }
-
   .prose pre {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border-strong);
@@ -140,31 +199,43 @@
     overflow-x: auto;
     margin-bottom: 1.5em;
   }
-
   .prose pre code {
     background: none;
     border: none;
     padding: 0;
-    color: var(--color-text);
     font-size: 0.875rem;
   }
-
   .prose blockquote {
-    border-left: 3px solid var(--color-accent);
+    border-left: 1px solid var(--color-accent);
     padding-left: 1.25rem;
     margin: 1.5em 0;
-    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
     font-style: italic;
+    color: var(--color-text);
   }
-
   .prose strong {
     color: var(--color-text);
     font-weight: 600;
   }
-
   .prose hr {
     border: none;
     border-top: 1px solid var(--color-border-strong);
-    margin: 2em 0;
+    margin: 2.5em 0;
+  }
+}
+
+@property --bracket {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

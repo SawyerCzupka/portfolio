@@ -1,43 +1,62 @@
 ---
-const year = new Date().getFullYear();
+interface Props {
+  sheet: string;
+}
+
+const { sheet } = Astro.props;
+
+const rev = new Date().toISOString().slice(0, 10).replaceAll("-", ".");
 
 const links = [
-  {
-    href: 'mailto:sawyerczupka@gmail.com',
-    label: 'email',
-    external: false,
-  },
-  {
-    href: 'https://linkedin.com/in/sawyerczupka',
-    label: 'linkedin',
-    external: true,
-  },
-  {
-    href: 'https://github.com/sawyerczupka',
-    label: 'github',
-    external: true,
-  },
+  { href: "mailto:sawyerczupka@gmail.com", label: "email", external: false },
+  { href: "https://linkedin.com/in/sawyerczupka", label: "linkedin", external: true },
+  { href: "https://github.com/sawyerczupka", label: "github", external: true },
+];
+
+const cells = [
+  { label: "drawn by", value: "S. Czupka" },
+  { label: "sheet", value: sheet },
+  { label: "rev", value: rev },
 ];
 ---
 
-<footer class="border-t border-border mt-24">
-  <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-    <span class="font-mono text-xs text-faint tracking-wider">
-      © {year} SAWYER CZUPKA
-    </span>
-    <ul class="flex items-center gap-5" role="list">
-      {links.map(({ href, label, external }) => (
-        <li>
-          <a
-            href={href}
-            target={external ? '_blank' : undefined}
-            rel={external ? 'noopener noreferrer' : undefined}
-            class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150 tracking-wider group"
+<footer class="relative z-10 mt-32 border-t border-border">
+  <div class="max-w-5xl mx-auto px-6 py-10">
+    <div
+      class="grid grid-cols-3 sm:grid-cols-[1fr_auto_auto_auto] border border-border-strong font-mono text-[11px] tracking-wide"
+    >
+      <div class="col-span-3 sm:col-span-1 p-4 border-b sm:border-b-0 sm:border-r border-border-strong">
+        <p class="uppercase text-faint mb-2">contact</p>
+        <ul class="flex flex-wrap gap-x-5 gap-y-1" role="list">
+          {
+            links.map(({ href, label, external }) => (
+              <li>
+                <a
+                  href={href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  class="link-draw text-text hover:text-accent pb-0.5"
+                >
+                  {label}{external && " ↗"}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      {
+        cells.map(({ label, value }, i) => (
+          <div
+            class:list={[
+              "p-4 sm:min-w-32",
+              i < cells.length - 1 && "border-r border-border-strong",
+            ]}
           >
-            {label}{external && ' ↗'}
-          </a>
-        </li>
-      ))}
-    </ul>
+            <p class="uppercase text-faint mb-2">{label}</p>
+            <p class="text-text">{value}</p>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </footer>

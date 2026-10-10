@@ -1,0 +1,28 @@
+---
+interface Props {
+  index: string;
+  title: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+const { index, title, href, linkLabel } = Astro.props;
+---
+
+<div class="flex items-end gap-4 mb-10">
+  <span class="font-mono text-[11px] text-accent tracking-wide pb-1.5">{index}</span>
+  <h2 class="font-serif text-3xl sm:text-4xl leading-none text-text">{title}</h2>
+  <div class="flex-1 h-px bg-border-strong mb-1.5 relative">
+    <span class="absolute right-0 -top-1 h-2.25 w-px bg-border-strong"></span>
+  </div>
+  {
+    href && (
+      <a
+        href={href}
+        class="link-draw font-mono text-xs text-muted hover:text-accent pb-0.5 mb-0.5 shrink-0"
+      >
+        {linkLabel} →
+      </a>
+    )
+  }
+</div>

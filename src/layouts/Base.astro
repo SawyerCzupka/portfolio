@@ -1,23 +1,28 @@
 ---
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
-import '../styles/global.css';
+import { ClientRouter } from "astro:transitions";
+import { Font } from "astro:assets";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
 
 interface Props {
   title: string;
   description?: string;
+  /** Short label for the footer title block, e.g. "resume". */
+  sheet?: string;
 }
 
 const {
   title,
-  description = 'Software Engineer working across ML systems, backend infrastructure, and DevOps.',
+  description = "Sawyer Czupka — software engineer working across backend systems, ML, and infrastructure.",
+  sheet = "index",
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,21 +30,37 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonicalURL} />
     <title>{title}</title>
 
-    <!-- Fonts: Space Grotesk + JetBrains Mono via Bunny Fonts (GDPR-friendly) -->
-    <link rel="preconnect" href="https://fonts.bunny.net" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.bunny.net/css?family=space-grotesk:300,400,500,600,700|jetbrains-mono:400,500&display=swap"
-    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta name="theme-color" content="#0c0c0b" />
 
-    <!-- Favicon placeholder -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <Font cssVariable="--font-instrument-serif" preload />
+    <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-geist-mono" />
+
+    {/* Runs before paint (and after each view-transition swap) so the theme never flashes. */}
+    <script is:inline>
+      const applyTheme = (doc = document) => {
+        const stored = localStorage.getItem("theme");
+        const theme =
+          stored ?? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        doc.documentElement.dataset.theme = theme;
+      };
+      applyTheme();
+      document.addEventListener("astro:before-swap", (e) => applyTheme(e.newDocument));
+    </script>
+
+    <ClientRouter />
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="sheet min-h-screen flex flex-col">
     <Nav />
-    <main class="flex-1">
+    <main class="flex-1 relative z-10">
       <slot />
     </main>
-    <Footer />
+    <Footer sheet={sheet} />
   </body>
 </html>
