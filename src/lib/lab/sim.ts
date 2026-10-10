@@ -18,6 +18,8 @@ export class Sim {
   private targets: [Target, Target];
   private weights: WebGLTexture;
   private stats: { fb: WebGLFramebuffer; buf: Float32Array };
+  private mask: WebGLTexture;
+  private page = [1, 1];
   private growth = new Float32Array(K).fill(1);
   private upkeep = new Float32Array(K).fill(1);
 
@@ -44,6 +46,12 @@ export class Sim {
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, statTex, 0);
     this.stats = { fb, buf: new Float32Array((w * h) / STAT_BLOCK / STAT_BLOCK * 4) };
     gl.bindVertexArray(gl.createVertexArray());
+    this.mask = gl.createTexture()!;
+    gl.bindTexture(gl.TEXTURE_2D, this.mask);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     population.forEach((_, i) => this.upload(i));
     for (let i = 0; i < K; i++) {
       const a = (i / K) * Math.PI * 2 + Math.random();
@@ -166,18 +174,53 @@ export class Sim {
     });
   }
 
-  /** Draw cover-fit to the canvas's current drawing buffer; `colors` is K rgb triples in 0..1. */
-  draw(colors: number[]) {
+  /** Text knockout mask covering the whole page (`pageW`×`pageH` CSS px). */
+  setMask(source: HTMLCanvasElement, pageW: number, pageH: number) {
+    const gl = this.gl;
+    gl.bindTexture(gl.TEXTURE_2D, this.mask);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+    this.page = [pageW, pageH];
+  }
+
+  /** Grid cell under a viewport point (CSS px), accounting for page scroll. */
+  cellAt(clientX: number, clientY: number, scroll: number, dpr: number) {
+    const cell = this.gl.drawingBufferWidth / this.w;
+    const y = ((clientY + scroll) * dpr) / cell;
+    return { x: (clientX * dpr) / cell, y: ((y % this.h) + this.h) % this.h };
+  }
+
+  /** Species slot at a grid cell, or null if empty. */
+  probe(x: number, y: number): number | null {
+    const gl = this.gl;
+    const px = new Float32Array(4);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.targets[0].fb);
+    gl.readBuffer(gl.COLOR_ATTACHMENT0);
+    gl.readPixels(x | 0, y | 0, 1, 1, gl.RGBA, gl.FLOAT, px);
+    const best = px.indexOf(Math.max(...px));
+    return px[best] > 0.05 ? best : null;
+  }
+
+  /**
+   * Draw to the canvas, scrolled with the page.
+   * - `colors`: K rgb triples in 0..1
+   * - `rects`: up to 4 viewport-space knockout boxes (x, y, w, h in CSS px)
+   */
+  draw(colors: number[], scroll: number, dpr: number, rects: number[] = []) {
     const gl = this.gl;
     const [cw, ch] = [gl.drawingBufferWidth, gl.drawingBufferHeight];
-    const cell = Math.max(cw / this.w, ch / this.h);
     this.pass(
       this.progs.draw,
       (u) => {
+        gl.activeTexture(gl.TEXTURE3);
+        gl.bindTexture(gl.TEXTURE_2D, this.mask);
+        gl.uniform1i(u("u_mask"), 3);
         gl.uniform3fv(u("u_colors"), colors);
-        gl.uniform1f(u("u_cell"), cell);
-        gl.uniform2f(u("u_offset"), (cw - cell * this.w) / 2, (ch - cell * this.h) / 2);
+        gl.uniform1f(u("u_cell"), cw / this.w);
         gl.uniform1f(u("u_height"), ch);
+        gl.uniform1f(u("u_dpr"), dpr);
+        gl.uniform1f(u("u_scroll"), scroll);
+        gl.uniform2fv(u("u_page"), this.page);
+        gl.uniform4fv(u("u_rects"), [...rects, ...Array(16).fill(-1e4)].slice(0, 16));
       },
       null,
       [cw, ch],

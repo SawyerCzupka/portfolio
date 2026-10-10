@@ -136,16 +136,24 @@ void main() {
 }`;
 
 // Halftone glyphs: one mark per cell, sized by mass; species are legend
-// symbols (dot, plus, ring, cross) rather than hues.
+// symbols (dot, plus, ring, cross) rather than hues. The toroidal world scrolls
+// with the page, and u_mask (page-space text boxes) knocks glyphs out behind text.
 export const DRAW = `${HEAD}
 uniform vec3 u_colors[4];
-uniform float u_cell;
-uniform vec2 u_offset;
-uniform float u_height;
+uniform sampler2D u_mask;
+uniform float u_cell, u_height, u_dpr, u_scroll;
+uniform vec2 u_page;
+uniform vec4 u_rects[4];
 out vec4 o;
+float box(vec2 p, vec4 r) {
+  vec2 d = max(r.xy - p, p - r.xy - r.zw);
+  return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+}
 float bar(vec2 l, float r, float t) { return max(min(abs(l.x), abs(l.y)) - t, max(abs(l.x), abs(l.y)) - r); }
 void main() {
-  vec2 c = (vec2(gl_FragCoord.x, u_height - gl_FragCoord.y) - u_offset) / u_cell;
+  vec2 px = vec2(gl_FragCoord.x, u_height - gl_FragCoord.y);
+  float world = u_cell * float(textureSize(u_mass, 0).y);
+  vec2 c = (px + vec2(0.0, mod(u_scroll * u_dpr, world))) / u_cell;
   vec2 l = fract(c) - 0.5;
   vec4 m = M(ivec2(floor(c)));
   int s = owner(m);
@@ -156,5 +164,9 @@ void main() {
           : s == 2 ? abs(length(l) - r * 0.7) - t
           : bar(mat2(0.7071, 0.7071, -0.7071, 0.7071) * l, r * 0.9, t);
   float a = r < 0.03 ? 0.0 : 1.0 - smoothstep(-0.5, 0.5, d * u_cell);
+  vec2 css = px / u_dpr;
+  float k = texture(u_mask, (css + vec2(0.0, u_scroll)) / u_page).r;
+  for (int i = 0; i < 4; i++) k = max(k, 1.0 - smoothstep(0.0, 14.0, box(css, u_rects[i])));
+  a *= 1.0 - 0.92 * k;
   o = vec4(u_colors[s] * a, a);
 }`;
