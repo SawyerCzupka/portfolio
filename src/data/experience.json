@@ -8,8 +8,10 @@
     "start": "2026-04",
     "current": true,
     "bullets": [
-      "Build integrations between Aurelian's AI call-handling agents and 911 computer-aided dispatch (CAD) systems across many vendors.",
-      "Work across the incident data pipeline, GIS data ingestion, connection observability, and the on-prem client used to reach legacy CAD systems."
+      "Full-stack engineer on an AI call-handling platform for 911 dispatch centers, shipping across the real-time voice agent, backend services, dispatcher-facing web app, internal tooling, and cloud infrastructure.",
+      "Lead much of the platform's integration with agencies' computer-aided dispatch (CAD) systems across tens of agencies and many vendors, from architecture and on-prem deployments to customer migrations and working directly with agency staff.",
+      "Developed core turn-taking behavior for the voice agent, teaching it to recognize when a caller hasn't finished speaking and wait rather than interrupt, with instrumentation to measure the impact on production calls.",
+      "Keep production systems reliable as part of the on-call rotation, building the failure handling, monitoring, and alerting that let engineering and support catch and resolve issues quickly."
     ]
   },
   {
